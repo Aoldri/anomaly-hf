@@ -22,6 +22,7 @@ local mcm_keybinds = ui_mcm and ui_mcm.key_hold
 local key_place = bind_to_dik(key_bindings.kUSE)
 local key_toggle_collision = DIK_keys.DIK_TAB
 local key_toggle_align = DIK_keys.DIK_CAPITAL
+local key_toggle_controls = DIK_keys.DIK_HOME
 
 
 states = {
@@ -372,7 +373,7 @@ local function on_key_press(dik)
                 print_msg("st_align_actor")
             end
         end
-    elseif dik == DIK_keys.DIK_HOME then
+    elseif dik == key_toggle_controls then
         if state == states.IDLE then
             return
         elseif state == states.HOLDING or
@@ -616,7 +617,7 @@ function UIAdvancedControls:InitControls()
             end
         },
         -- Swap to PREVIEW mode
-        [DIK_keys.DIK_HOME] = {
+        [key_toggle_controls] = {
             [ui_events.WINDOW_KEY_PRESSED] = function()
                 set_state(states.PREVIEW)
                 self:Close()
@@ -871,6 +872,7 @@ function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_opti
 	if mcm then
         key_toggle_collision = ui_mcm.get("aol_hf/bind_collision") or key_toggle_collision
         key_toggle_align = ui_mcm.get("aol_hf/bind_alignment") or key_toggle_align
+        key_toggle_controls = ui_mcm.get("aol_hf/bind_place_mode") or key_toggle_controls
 	end
     key_place = bind_to_dik(key_bindings.kUSE)
 end
