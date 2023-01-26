@@ -142,6 +142,9 @@ function create_object(placeable_section, location, rotation, lvid, gvid)
         obj.angle = vector():set(rotation.x, rotation.y, rotation.z)
     end
 
+    -- Initialise data store
+    hf_obj_manager.set_data(obj.id, {})
+    
     -- Initialise additional data
     local placeable_type = ini_sys:r_string_ex(placeable_section, "placeable_type") or "prop"
     local type_functor = hf_furniture_types.get_func(placeable_type)
@@ -271,7 +274,7 @@ local direction_keys = {
 }
 
 ---@return game_object|nil
-local function get_obj_at_crosshair()
+function get_obj_at_crosshair()
     if level.get_target_dist() > 5 then return end
     local obj = level.get_target_obj()
     if not obj then return end
@@ -279,7 +282,7 @@ local function get_obj_at_crosshair()
 end
 
 ---@return hf_binder_wrapper|nil
-local function get_wrapper_at_crosshair()
+function get_wrapper_at_crosshair()
     local obj = get_obj_at_crosshair()
     if not obj then return end
     local binder = obj:binded_object()
@@ -401,40 +404,50 @@ end
 
 ------
 
+function start_placing_item(section)
+    if state ~= states.IDLE then
+        item_id = nil
+        return
+    end
+    print_msg("st_place_popup")
+    hide_hud_inventory()
+    db.actor:activate_slot(0)
+    set_state(states.HOLDING)
+
+    local bbox_size_str = ini_sys:r_string_ex(section, "bounding_box_size", "0.5,0.5,0.5")
+    local bbox_size = str_explode(bbox_size_str,",")
+    local bbox_origin_str = ini_sys:r_string_ex(section, "bounding_box_origin", "0,0.25,0")
+    local bbox_origin = str_explode(bbox_origin_str,",")
+    base_rot = ini_sys:r_float_ex(section, "base_rotation", 0) or 0
+    base_loc = vector():set(tonumber(bbox_origin[1]), tonumber(bbox_origin[2]), tonumber(bbox_origin[3]))
+
+    ---@type bbox_collider
+    bbox = hf_bbox.bbox_collider(tonumber(bbox_size[1]), tonumber(bbox_size[2]), tonumber(bbox_size[3]))
+
+    bbox:OffsetVertices(base_loc)
+
+    local crosshair_vertex = bbox:GetCrosshairVertex()
+    crosshair_vertex:sub(base_loc)
+    bbox:SetCrosshairVertex(crosshair_vertex)
+
+    phy_obj_section = section
+end
+
 function place_item(obj)
     return gc("st_place_furniture")
 end
 
 function func_place_item(obj)
     item_id = obj:id()
-    if state == states.IDLE then
-        db.actor:activate_slot(0)
-        hide_hud_inventory()
-        pr("USING ITEM TO PLACE")
-        set_state(states.HOLDING)
-        pr("state=HOLDING")
-        print_msg("st_place_popup")
-        phy_obj_section = ini_sys:r_string_ex(obj:section(), "placeable_section") or nil
-        if phy_obj_section == nil then
-            pr("No section of physical object to place")
-        end
 
-        local bbox_size_str = ini_sys:r_string_ex(phy_obj_section, "bounding_box_size", "0.5,0.5,0.5")
-        local bbox_size = str_explode(bbox_size_str,",")
-        local bbox_origin_str = ini_sys:r_string_ex(phy_obj_section, "bounding_box_origin", "0,0.25,0")
-        local bbox_origin = str_explode(bbox_origin_str,",")
-        base_rot = ini_sys:r_float_ex(phy_obj_section, "base_rotation", 0) or 0
-        base_loc = vector():set(tonumber(bbox_origin[1]), tonumber(bbox_origin[2]), tonumber(bbox_origin[3]))
-
-        ---@type bbox_collider
-        bbox = hf_bbox.bbox_collider(tonumber(bbox_size[1]), tonumber(bbox_size[2]), tonumber(bbox_size[3]))
-
-        bbox:OffsetVertices(base_loc)
-
-        local crosshair_vertex = bbox:GetCrosshairVertex()
-        crosshair_vertex:sub(base_loc)
-        bbox:SetCrosshairVertex(crosshair_vertex)
+    print_msg("st_place_popup")
+    physic_section = ini_sys:r_string_ex(obj:section(), "placeable_section")
+    if physic_section == nil then
+        pr("No section of physical object to place")
+        return
     end
+
+    start_placing_item(physic_section)
 end
 
 ------
