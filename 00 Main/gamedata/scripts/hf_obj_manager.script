@@ -1,0 +1,63 @@
+local hf_data = {}
+
+-- Soft update
+function update_data(id, data)
+    hf_data[id] = hf_data[id] or {}
+    for index, datum in pairs(data) do
+        hf_data[id][index] = datum
+    end
+end
+
+-- Override
+function set_data(id, data)
+    hf_data[id] = data
+end
+
+-- Getter
+function get_data(id) -- need to add code to binders to update data before access
+    return hf_data[id]
+end
+
+-- Destroy
+function delete_data(id)
+    hf_data[id] = nil
+end
+
+-- Debugging print
+function print_data(id)
+    printf("print_data(id):"..id)
+    if not hf_data[id] then
+        printf("no data")
+        return
+    end
+    for index, datum in pairs(hf_data[id]) do
+        printf("index:"..index..", datum:"..datum)
+    end
+end
+
+function save_state(mdata)
+    for id, data in pairs(hf_data) do
+        -- Attempt to call binder:save_data() if se is online
+        local game_obj = level.object_by_id(id)
+
+        if game_obj then -- I fucking love not having continue, wowwiee
+            local binder = game_obj:binded_object()
+            if binder then -- this reads so nice like wowww
+                if binder.save_data then
+                    binder:save_data()
+                end
+            end
+        end
+    end
+
+    mdata.hf_data = hf_data
+end
+
+function load_state(mdata)
+	hf_data = mdata.hf_data or {}
+end
+
+function on_game_start()
+	RegisterScriptCallback("save_state",save_state)
+	RegisterScriptCallback("load_state",load_state)
+end

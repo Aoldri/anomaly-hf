@@ -1,0 +1,32 @@
+[piano_item]:tch_junk
+class									= II_ATTCH
+kind								    = i_tool
+visual									= dynamics\placeable\portable_piano.ogf
+description								= st_placeable_piano_descr
+inv_name								= st_placeable_piano
+inv_name_short							= st_placeable_piano
+inv_grid_x								= 7
+inv_grid_y								= 0
+inv_grid_height							= 2
+inv_grid_width							= 3
+icons_texture							= ui\placeable_devices
+cost									= 8000
+inv_weight								= 4
+
+use1_functor         				    = placeable_furniture.place_item
+use1_action_functor  					= placeable_furniture.func_place_item
+
+placeable_type                          = piano
+placeable_section                       = placeable_piano
+
+[placeable_piano]: physic_object
+visual                                   = dynamics\placeable\portable_piano.ogf
+inv_weight                               = 0.82
+
+script_binding                           = bind_hf_base.init
+ui_on_interaction                        = ui_furniture_piano.start_dialog
+ui_on_simple_interaction                 = ui_furniture_piano.start_dialog
+item_section                             = piano_item
+
+bounding_box_size                        = 1.02376, 0.418085, 0.882105
+bounding_box_origin                      = 0, 0.441102, 0.000072

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="st_placeable_radio">
+		<text>Размещаемое радио</text>
+	</string>
+	<string id="st_placeable_radio_descr">
+		<text>Радиоприёмник в рабочем состоянии. Способен принимать те же сигналы, которые слышны на многих базах по всей Зоне.\n \n
+		%c[ui_gray_3]СВОЙСТВА:\n
+		%c[d_blue] • %c[ui_gray_2] технологический предмет\n
+		%c[d_blue] • %c[ui_gray_2] размещаемый предмет\n
+		</text>
+	</string>
+</string_table>

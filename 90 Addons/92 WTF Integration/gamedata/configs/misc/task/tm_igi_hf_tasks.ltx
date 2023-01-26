@@ -1,0 +1,505 @@
+;------------------------------------------------
+; Sakharov (Yantar): Task to exchange a Moonlight for a Compact Psi Light
+[yan_stalker_sakharov_task_hf_light_altar]
+icon = ui_iconsTotal_artefact
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(yan_stalker_sakharov_task_hf_light_altar) +yan_labx16_switcher_primary_off} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_yan_stalker_sakharov_task_hf_light_altar_job_descr
+task_complete_descr   = igi_task_text_yan_stalker_sakharov_task_hf_light_altar_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(yan_stalker_sakharov_task_hf_light_altar)%
+
+on_complete           = %=igi_task_generic_finish(yan_stalker_sakharov_task_hf_light_altar:true)%
+on_fail               = %=igi_task_generic_finish(yan_stalker_sakharov_task_hf_light_altar:false))%
+condlist_0            = {!task_giver_alive(yan_stalker_sakharov_task_hf_light_altar)} fail
+
+;------------------------------------------------
+; Peregrine  (Ecologist Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[mechanic_army_yan_mlr_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(mechanic_army_yan_mlr_task_hf_workshop) +mechanic_army_yan_mlr_upgrade_tier_3 -mechanic_army_yan_mlr_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_mechanic_army_yan_mlr_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_mechanic_army_yan_mlr_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(mechanic_army_yan_mlr_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(mechanic_army_yan_mlr_task_hf_workshop:true) +mechanic_army_yan_mlr_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(mechanic_army_yan_mlr_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(mechanic_army_yan_mlr_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Kirilov  (Military Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop) +agr_smart_terrain_1_6_army_mechanic_stalker_upgrade_tier_3 -agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop:true) +agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Mangun  (Duty Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[bar_visitors_stalker_mechanic_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(bar_visitors_stalker_mechanic_task_hf_workshop) +bar_visitors_stalker_mechanic_upgrade_tier_3 -bar_visitors_stalker_mechanic_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_bar_visitors_stalker_mechanic_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_bar_visitors_stalker_mechanic_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(bar_visitors_stalker_mechanic_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(bar_visitors_stalker_mechanic_task_hf_workshop:true) +bar_visitors_stalker_mechanic_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(bar_visitors_stalker_mechanic_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(bar_visitors_stalker_mechanic_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Sawmill Technician  (Loner Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[dasc_tech_mlr_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(dasc_tech_mlr_task_hf_workshop) +dasc_tech_mlr_upgrade_tier_3 -dasc_tech_mlr_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_dasc_tech_mlr_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_dasc_tech_mlr_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(dasc_tech_mlr_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(dasc_tech_mlr_task_hf_workshop:true) +dasc_tech_mlr_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(dasc_tech_mlr_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(dasc_tech_mlr_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Limpid  (Bandit Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop) +val_smart_terrain_7_3_bandit_mechanic_stalker_upgrade_tier_3 -val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop:true) +val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Hog  (Mercenary Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[cit_killers_merc_mechanic_stalker_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(cit_killers_merc_mechanic_stalker_task_hf_workshop) +cit_killers_merc_mechanic_stalker_upgrade_tier_3 -cit_killers_merc_mechanic_stalker_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_cit_killers_merc_mechanic_stalker_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_cit_killers_merc_mechanic_stalker_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(cit_killers_merc_mechanic_stalker_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(cit_killers_merc_mechanic_stalker_task_hf_workshop:true) +cit_killers_merc_mechanic_stalker_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(cit_killers_merc_mechanic_stalker_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(cit_killers_merc_mechanic_stalker_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Xenotech  (Loner Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop) +esc_smart_terrain_5_7_loner_mechanic_stalker_upgrade_tier_3 -esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop:true) +esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Seryoga  (Military Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[army_south_mechan_mlr_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(army_south_mechan_mlr_task_hf_workshop) +army_south_mechan_mlr_upgrade_tier_3 -army_south_mechan_mlr_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_army_south_mechan_mlr_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_army_south_mechan_mlr_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(army_south_mechan_mlr_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(army_south_mechan_mlr_task_hf_workshop:true) +army_south_mechan_mlr_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(army_south_mechan_mlr_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(army_south_mechan_mlr_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Nitro  (Loner Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[jup_b217_stalker_tech_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(jup_b217_stalker_tech_task_hf_workshop) +jup_b217_stalker_tech_upgrade_tier_3 -jup_b217_stalker_tech_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_jup_b217_stalker_tech_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_jup_b217_stalker_tech_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(jup_b217_stalker_tech_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(jup_b217_stalker_tech_task_hf_workshop:true) +jup_b217_stalker_tech_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(jup_b217_stalker_tech_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(jup_b217_stalker_tech_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Tech Gangster  (Bandit Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[jup_cont_mech_bandit_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(jup_cont_mech_bandit_task_hf_workshop) +jup_cont_mech_bandit_upgrade_tier_3 -jup_cont_mech_bandit_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_jup_cont_mech_bandit_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_jup_cont_mech_bandit_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(jup_cont_mech_bandit_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(jup_cont_mech_bandit_task_hf_workshop:true) +jup_cont_mech_bandit_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(jup_cont_mech_bandit_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(jup_cont_mech_bandit_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Depot Technician  (Monolith Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[mechanic_monolith_jup_depo_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(mechanic_monolith_jup_depo_task_hf_workshop) +mechanic_monolith_jup_depo_upgrade_tier_3 -mechanic_monolith_jup_depo_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_mechanic_monolith_jup_depo_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_mechanic_monolith_jup_depo_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(mechanic_monolith_jup_depo_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(mechanic_monolith_jup_depo_task_hf_workshop:true) +mechanic_monolith_jup_depo_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(mechanic_monolith_jup_depo_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(mechanic_monolith_jup_depo_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Novikov  (Loner Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[mar_base_stalker_tech_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(mar_base_stalker_tech_task_hf_workshop) +mar_base_stalker_tech_upgrade_tier_3 -mar_base_stalker_tech_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_mar_base_stalker_tech_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_mar_base_stalker_tech_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(mar_base_stalker_tech_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(mar_base_stalker_tech_task_hf_workshop:true) +mar_base_stalker_tech_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(mar_base_stalker_tech_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(mar_base_stalker_tech_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Maus  (UNISG Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[jup_depo_isg_tech_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(jup_depo_isg_tech_task_hf_workshop) +jup_depo_isg_tech_upgrade_tier_3 -jup_depo_isg_tech_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_jup_depo_isg_tech_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_jup_depo_isg_tech_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(jup_depo_isg_tech_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(jup_depo_isg_tech_task_hf_workshop:true) +jup_depo_isg_tech_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(jup_depo_isg_tech_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(jup_depo_isg_tech_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Screw  (Freedom Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop) +mil_smart_terrain_7_7_freedom_mechanic_stalker_upgrade_tier_3 -mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop:true) +mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Cleric  (Monolith Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[pri_monolith_monolith_mechanic_stalker_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(pri_monolith_monolith_mechanic_stalker_task_hf_workshop) +pri_monolith_monolith_mechanic_stalker_upgrade_tier_3 -pri_monolith_monolith_mechanic_stalker_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_pri_monolith_monolith_mechanic_stalker_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_pri_monolith_monolith_mechanic_stalker_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(pri_monolith_monolith_mechanic_stalker_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(pri_monolith_monolith_mechanic_stalker_task_hf_workshop:true) +pri_monolith_monolith_mechanic_stalker_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(pri_monolith_monolith_mechanic_stalker_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(pri_monolith_monolith_mechanic_stalker_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Outskirts Technician  (Merc Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[merc_pri_a18_mech_mlr_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(merc_pri_a18_mech_mlr_task_hf_workshop) +merc_pri_a18_mech_mlr_upgrade_tier_2 -merc_pri_a18_mech_mlr_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_merc_pri_a18_mech_mlr_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_merc_pri_a18_mech_mlr_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(merc_pri_a18_mech_mlr_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(merc_pri_a18_mech_mlr_task_hf_workshop:true) +merc_pri_a18_mech_mlr_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(merc_pri_a18_mech_mlr_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(merc_pri_a18_mech_mlr_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Yubileiny Tech  (Monolith Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[mechanic_monolith_kbo_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(mechanic_monolith_kbo_task_hf_workshop) +mechanic_monolith_kbo_upgrade_tier_3 -mechanic_monolith_kbo_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_mechanic_monolith_kbo_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_mechanic_monolith_kbo_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(mechanic_monolith_kbo_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(mechanic_monolith_kbo_task_hf_workshop:true) +mechanic_monolith_kbo_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(mechanic_monolith_kbo_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(mechanic_monolith_kbo_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Dahzbog  (Sin Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[red_greh_tech_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(red_greh_tech_task_hf_workshop) +red_greh_tech_upgrade_tier_3 -red_greh_tech_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_red_greh_tech_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_red_greh_tech_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(red_greh_tech_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(red_greh_tech_task_hf_workshop:true) +red_greh_tech_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(red_greh_tech_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(red_greh_tech_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Truck Cemetary Tech  (Bandit Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[trucks_cemetery_bandit_mechanic_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(trucks_cemetery_bandit_mechanic_task_hf_workshop) +trucks_cemetery_bandit_mechanic_upgrade_tier_3 -trucks_cemetery_bandit_mechanic_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_trucks_cemetery_bandit_mechanic_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_trucks_cemetery_bandit_mechanic_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(trucks_cemetery_bandit_mechanic_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(trucks_cemetery_bandit_mechanic_task_hf_workshop:true) +trucks_cemetery_bandit_mechanic_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(trucks_cemetery_bandit_mechanic_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(trucks_cemetery_bandit_mechanic_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Cardan  (Loner Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[zat_a2_stalker_mechanic_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(zat_a2_stalker_mechanic_task_hf_workshop) +zat_a2_stalker_mechanic_upgrade_tier_3 -zat_a2_stalker_mechanic_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_zat_a2_stalker_mechanic_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_zat_a2_stalker_mechanic_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(zat_a2_stalker_mechanic_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(zat_a2_stalker_mechanic_task_hf_workshop:true) +zat_a2_stalker_mechanic_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(zat_a2_stalker_mechanic_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(zat_a2_stalker_mechanic_task_hf_workshop)} fail
+
+;------------------------------------------------
+; Merc Tech  (Merc Mechanic): Task to exchange a broken weapon for a Portable Workshop
+[zat_stancia_mech_merc_task_hf_workshop]
+icon = ui_inGame2_Instrumenti
+storyline             = false
+prior                 = 10
+repeat_timeout        = 16200
+precondition          = {=validate_generic_task(zat_stancia_mech_merc_task_hf_workshop) +zat_stancia_mech_merc_upgrade_tier_3 -zat_stancia_mech_merc_task_hf_workshop_complete} true, false
+
+title_functor         = igi_task_generic_text
+descr_functor         = igi_task_generic_text
+job_descr             = igi_task_text_zat_stancia_mech_merc_task_hf_workshop_job_descr
+task_complete_descr   = igi_task_text_zat_stancia_mech_merc_task_hf_workshop_finish
+
+stage_complete        = 1
+status_functor        = igi_task_generic_status
+target_functor        = igi_task_generic_target
+on_job_descr          = %=igi_task_generic_setup(zat_stancia_mech_merc_task_hf_workshop)%
+
+on_complete           = %=igi_task_generic_finish(zat_stancia_mech_merc_task_hf_workshop:true) +zat_stancia_mech_merc_task_hf_workshop_complete%
+on_fail               = %=igi_task_generic_finish(zat_stancia_mech_merc_task_hf_workshop:false))%
+condlist_0            = {!task_giver_alive(zat_stancia_mech_merc_task_hf_workshop)} fail

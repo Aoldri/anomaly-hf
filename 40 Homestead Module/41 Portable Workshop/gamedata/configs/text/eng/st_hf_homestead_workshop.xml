@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="st_placeable_workshop">
+		<text>Portable Workshop</text>
+	</string>
+	<string id="st_placeable_workshop_descr">
+		<text>A combination of a deployable table, workshop tools, and an integrated stash. This allows stalkers to be more self-sufficient in less than friendly areas, though its weight is a deterrent against crafting on the road.\n \n
+		%c[ui_gray_3]PROPERTIES:\n
+		%c[d_blue] • %c[ui_gray_2] technological item\n
+		%c[d_blue] • %c[ui_gray_2] valuable\n
+		%c[d_blue] • %c[ui_gray_2] high capacity (integrated)\n
+		%c[d_orange] • %c[ui_gray_2] usable for repairing equipment\n</text>
+	</string>
+</string_table>

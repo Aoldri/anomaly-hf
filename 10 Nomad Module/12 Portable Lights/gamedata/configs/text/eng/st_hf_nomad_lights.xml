@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+    <string id="st_placeable_gas_lamp">
+		<text>Gas Lamp</text>
+	</string>
+	<string id="st_placeable_gas_lamp_descr">
+		<text>Generates light by igniting a wick doused in kerosene. Lanterns are an uncommon light source amongst stalkers as the fuel takes up weight and space in the backpacks that could otherwise be used for ammunition or priceless artefacts. Experienced stalkers that regularly travel along the path less troden make use of these lamps for their hideouts. This one has seen considerable wear over the years and appears to have lost its glass lampshade.\n \n
+		%c[ui_gray_3]PROPERTIES:\n
+		%c[d_blue] • %c[ui_gray_2] technological item\n
+		%c[d_blue] • %c[ui_gray_2] placeable item\n
+		%c[d_blue] • %c[ui_gray_2] low fuel consumption\n
+		%c[d_blue] • %c[ui_gray_2] fuel: kerosene\n</text>
+	</string>
+
+	<string id="st_placeable_metal_torch">
+		<text>Metal Torch</text>
+	</string>
+	<string id="st_placeable_metal_torch_descr">
+		<text>A soviet-era handheld flashlight. The bulky installation of the metal container makes efficient use of the batteries, which is more useful for illuminating hideouts. This particular light can be constructed in the field, though its usefulness is hampered by its conal light. Experienced stalkers use this to their advantage, illuminating potential intruders whilst maintaining their own concealment.\n \n
+		%c[ui_gray_3]PROPERTIES:\n
+		%c[d_blue] • %c[ui_gray_2] technological item\n
+		%c[d_blue] • %c[ui_gray_2] placeable item\n
+		%c[d_blue] • %c[ui_gray_2] low electric power consumption\n
+		%c[d_blue] • %c[ui_gray_2] fuel: batteries\n</text>
+	</string>
+
+	<string id="st_placeable_light_altar">
+		<text>Compact Psi Light</text>
+	</string>
+	<string id="st_placeable_light_altar_descr">
+		<text>An object of unknown origin and purpose. Originally, this strange object emitted lethal psi-waves and was the cause of death to many unsuspecting stalkers who braved the northern areas. This one was modified by Sakharov and, with the help of a few artefacts, became a source of limitless light and mental strength.\n \n
+		%c[ui_gray_3]PROPERTIES:\n
+		%c[d_blue] • %c[ui_gray_2] technological item\n
+		%c[d_blue] • %c[ui_gray_2] placeable item\n
+		%c[d_blue] • %c[ui_gray_2] valuable\n
+		%c[d_blue] • %c[ui_gray_2] low electric power consumption\n
+		%c[d_blue] • %c[ui_gray_2] uses a Moonlight artefact\n
+		%c[d_blue] • %c[ui_gray_2] fuel: gauss batteries\n</text>
+	</string>
+</string_table>

@@ -1,0 +1,153 @@
+local TYPE2FUNC = {}
+
+---@param obj game_object|cse_alife_object|string
+---@return string|nil type `nil` on failure
+function get_type(obj)
+    -- Get type directly from section name
+    if type(obj) == "string" then
+        return SYS_GetParam(0, obj, "placeable_type")
+    end
+
+    local item_section = nil
+    -- Get type from game object
+    if type(obj.id) == "function" then
+        ---@cast obj game_object
+        local type = SYS_GetParam(0, obj:section(), "placeable_type")
+        if type then return type end
+
+        item_section = SYS_GetParam(0, obj:section(), "item_section")
+    
+    -- Get type from server object
+    elseif type(obj.id) == "number" then
+        ---@cast obj cse_alife_object
+        local type = SYS_GetParam(0, obj:section_name(), "placeable_type")
+        if type then return type end
+
+        item_section = SYS_GetParam(0, obj:section_name(), "item_section")
+    end
+    
+    if not item_section then return end
+    
+    -- Check item variant for placeable_type
+    return SYS_GetParam(0, item_section, "placeable_type")
+end
+
+function add_type(type, func, force)
+    if TYPE2FUNC[type] and not force then return end
+    TYPE2FUNC[type] = func
+end
+
+function get_func(type)
+    return TYPE2FUNC[type]
+end
+
+function init_light(obj_id)
+    -- Modify light to values specified in section
+    modify_light_data(obj_id)
+    
+    -- Switch off light when it is online
+    -- CreateTimeEvent("PlaceableLight","TurnOffLight" .. obj_id, 0, turn_off_light, obj_id)
+    hf_obj_manager.update_data(obj_id, {is_on=false})
+end
+add_type("light", init_light)
+
+function init_stash(obj_id)
+    local item_section = ini_sys:r_string_ex(alife_object(obj_id):section_name(), "item_section")
+    if not item_section then return end
+
+    -- Save stash data
+    local m_data = alife_storage_manager.get_state()
+    if not (m_data.player_created_stashes) then
+        m_data.player_created_stashes = {}
+    end
+    m_data.player_created_stashes[obj_id] = item_section
+
+    -- Send script callback (not used in vanilla)
+    local data = {
+        stash_id = obj_id,
+        stash_name = item_section,
+        stash_section = item_section
+    }
+    SendScriptCallback("actor_on_stash_create", data)
+end
+add_type("stash", init_stash)
+
+----
+-- Light Functions
+----
+function modify_light_data(obj_id)
+    local obj = alife_object(obj_id)
+    if not obj then return end
+
+    local section = obj:section_name()
+    local data = utils_stpk.get_lamp_data(obj)
+    
+    local light_section = ini_sys:r_string_ex(section, "light_section", "glowstick_definition")
+	
+	data.visual_name = ini_sys:r_string_ex(section, "visual", "dynamics\\placeable\\gas_lamp")
+    
+    -- Type of light
+    local type = ini_sys:r_float_ex(light_section, "type", 2)
+    if type == 1 then -- Point
+        data.light_flags = 45
+    elseif type == 2 then -- Spot
+        data.light_flags = 61
+    end
+
+    -- Add shadows
+    if (ini_sys:r_bool_ex(light_section, "has_shadows", false)) then
+        data.light_flags = data.light_flags + 2
+    end
+	
+	-- Volumetric light
+	if (ini_sys:r_bool_ex(light_section, "volumetric", false)) then
+		data.light_flags = data.light_flags + 64 
+		
+		data.volumetric_quality = ini_sys:r_float_ex(light_section, "volumetric_quality", 0.5)
+		data.volumetric_intensity = ini_sys:r_float_ex(light_section, "volumetric_intensity", 0.5)
+		data.volumetric_distance = ini_sys:r_float_ex(light_section, "volumetric_distance", 0.5)
+	end
+	
+	-- Color
+	local color_s = ini_sys:r_string_ex(light_section, "color", "0.5,0.5,0.5,0.5")
+	local _s = str_explode(color_s,",")
+	
+	for i=1,#_s do
+		_s[i] = clamp(round(tonumber(_s[i]) * 255), 0, 255)
+	end
+	
+	local function lshift(x, by)
+		return x * 2 ^ by
+	end
+	
+	data.main_color = lshift(bit_and(_s[4],0xff), 24) + lshift(bit_and(_s[1],0xff), 16) + lshift(bit_and(_s[2],0xff), 8) + bit_and(_s[3],0xff)
+	data.main_brightness = 1.0
+	
+	data.main_color_animator = ini_sys:r_string_ex(light_section, "color_animator", "empty")
+	data.main_bone = ini_sys:r_string_ex(light_section, "main_bone", "bone_light")
+    data.main_cone_angle = ini_sys:r_float_ex(light_section, "cone_angle", 0)
+	data.main_range = ini_sys:r_float_ex(light_section, "range", 15)
+
+    utils_stpk.set_lamp_data(data, obj)
+
+    return true
+
+end
+
+function turn_off_light(obj_id)
+    local obj = get_object_by_id(obj_id)
+    if not (obj) then
+        return
+    end
+    if not (obj.get_hanging_lamp) then
+        return
+    end
+
+    local lamp = obj:get_hanging_lamp()
+    if not lamp then
+        return
+    end
+
+    if lamp:is_on() then lamp:turn_off() end
+    return true
+end

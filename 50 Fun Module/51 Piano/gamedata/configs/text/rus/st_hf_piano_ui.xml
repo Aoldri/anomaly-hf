@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+    <string id="st_autoplay">
+		<text>Автоигра</text>
+	</string>
+	<string id="st_configure">
+		<text>Настроить</text>
+	</string>
+	<string id="st_tempo">
+		<text>Темп</text>
+	</string>
+	<string id="st_transpose">
+		<text>Транспонировка</text>
+	</string>
+	<string id="st_volume">
+		<text>Объем</text>
+	</string>
+	<string id="st_instrument">
+		<text>Инструмент</text>
+	</string>
+	<string id="st_filter_by_tag">
+		<text>Фильтр по тегам</text>
+	</string>
+</string_table>

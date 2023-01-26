@@ -1,0 +1,44 @@
+TARGET_NAME = "repair"
+PATTERN = "return"
+
+local trace_assert = igi_helper.trace_assert
+local trace_dbg = igi_helper.trace_dbg
+local TASK_STATUSES = igi_subtask.TASK_STATUSES
+local WorldState = igi_world_state.WorldState
+
+function is_failed(se_obj, section_name)
+	if not se_obj then return true end
+	return se_obj:section_name() ~= section_name
+end
+
+-- Patch fetch task so that it takes condition of items into account (must be greater than threshold)
+-- TODO: Allow adjustment of threshold per task, rather than globally
+function ready_to_finish(se_obj)
+
+    local item = igi_helper.level_object(se_obj.id)
+	if item then
+        local section = item:section()
+        local threshold = 90
+        local in_good_condition = true
+        -- Reject if overall weapon condition is less than threshold
+        if item.condition and item:condition() < (threshold/100) then
+            in_good_condition = false
+        end
+        -- Reject if one or more parts have a condition less than threshold
+        local parts = se_load_var(item:id(), item:name(), "parts")
+        for k,v in pairs(parts) do
+            if string.find(k, "prt_w_") and v < threshold then
+                in_good_condition = false
+            end
+        end
+        return in_good_condition
+    end
+    -- Reject in case the game object cannot be found (server object is still intact)
+	return false
+end
+
+function get_status(entity)
+    local se_obj = WorldState.objects[entity.id]
+	if is_failed(se_obj, entity.section_name) then return TASK_STATUSES.FAILED end
+	return ready_to_finish(se_obj) and TASK_STATUSES.READY_TO_FINISH or TASK_STATUSES.RUNNING
+end

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+    <string id="st_placeable_piano">
+		<text>Portable Keyboard</text>
+	</string>
+	<string id="st_placeable_piano_descr">
+		<text>A luxury installation not often seen in the Zone. Although it does not offer any protection against mutants or hostile stalkers, it can provide a brief respite against the hostilities of the Zone. This one appears to have many music sheets of varying difficulty and a number of synthetic-sounding instruments.\n \n
+		%c[ui_gray_3]PROPERTIES:\n
+		%c[d_blue] • %c[ui_gray_2] technological item\n
+		%c[d_blue] • %c[ui_gray_2] placeable item\n
+		%c[d_blue] • %c[ui_gray_2] valuable\n</text>
+	</string>
+</string_table>

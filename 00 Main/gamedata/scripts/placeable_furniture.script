@@ -1,0 +1,912 @@
+gc = game.translate_string
+
+-- util stuff
+local function pr(...)
+    local debug = true
+    if debug then
+        printf("placeable_furniture: " .. ...)
+    end
+end
+
+local function print_msg(string_id)
+    local msg = gc(string_id)
+    if ui_popup_messages then
+        ui_popup_messages.GUI:AddMessage(msg)
+    else
+        actor_menu.set_msg(1, msg, 3)
+    end
+end
+
+-- keybinds
+local mcm_keybinds = ui_mcm and ui_mcm.key_hold
+local key_place = bind_to_dik(key_bindings.kUSE)
+local key_toggle_collision = DIK_keys.DIK_TAB
+local key_toggle_align = DIK_keys.DIK_CAPITAL
+
+
+states = {
+    IDLE=1,
+    HOLDING=2,
+    ADV_CTRL=3,
+    PREVIEW=4
+}
+local state = states.IDLE
+
+align_states = {
+    ACTOR = 1,
+    SURFACE = 2,
+}
+align_state = align_states.ACTOR
+
+local check_collision = true
+
+local place_coordinates = nil
+local place_sound = xr_sound.get_safe_sound_object( "interface\\place_object" )
+local item_id = nil
+local phy_obj_section = nil
+
+local location_offset = vector():set(0, 0, 0)
+local rotation_offset = 0
+local base_rot = 0
+local base_loc = vector():set(0, 0, 0)
+
+local player_pos = nil
+local player_dir = nil
+local player_dist = nil
+
+local bbox = nil
+local bbox_drawer = aol_bshape.bshape_renderer()
+
+---------------------
+-- State Management
+---------------------
+function reset_offsets()
+    location_offset = utils_data.string_to_vector(ui_mcm.get("aol_hf/location_offset"))
+    rotation_offset = 0
+    printf("resetting offsets: %s", vec_to_str(location_offset))
+end
+
+transition_functors = {
+    [states.HOLDING] = {
+        [states.ADV_CTRL] = function ()
+            player_pos = vector():set(device().cam_pos)
+            player_dir = vector():set(device().cam_dir)
+            player_dist = level.get_target_dist()
+        end
+    },
+    [states.ADV_CTRL] = {
+        [states.HOLDING] = reset_offsets
+    },
+    [states.PREVIEW] = {
+        [states.HOLDING] = reset_offsets
+    },
+    [states.IDLE] = {
+        [states.HOLDING] = reset_offsets
+    }
+}
+
+-- Perform some function when a state transitions occurs
+function on_state_transition(old_state, new_state)
+    local func = transition_functors[old_state] and transition_functors[old_state][new_state]
+    if func then
+        func()
+    end
+end
+
+function get_state()
+    return state
+end
+
+function set_state(new_state)
+    local old_state = state
+    state = new_state
+    on_state_transition(old_state, new_state)
+end
+
+function is_state(check_state)
+    return state == check_state
+end
+
+function in_placing_state()
+    return get_state() ~= states.IDLE
+end
+---------------------
+-- Objects and their data
+---------------------
+
+---Creates and places an object in the world.
+---Also initialises additional data depending on their placeable_type as defined in their section
+---@param placeable_section string
+---@param location vector
+---@param rotation Quaternion|vector
+---@param lvid integer? Level Vertex ID
+---@param gvid integer? Game Vertex ID
+---@return integer|nil obj.id
+function create_object(placeable_section, location, rotation, lvid, gvid)
+    -- Exit early if placeable_section is not supplied
+    if not placeable_section then
+        pr("Could not find associated object with item")
+        return
+    end
+
+    location = location or vector():set(0,0,0)
+    rotation = rotation or vector():set(0,0,0)
+
+    local obj = alife_create(placeable_section, location, lvid or db.actor:level_vertex_id(), gvid or db.actor:game_vertex_id())
+    if not obj then return end
+
+    -- Rotate object with quaternion or vector
+    if rotation.w then
+        obj.angle = rotation:to_euler_angles()
+    else
+        obj.angle = vector():set(rotation.x, rotation.y, rotation.z)
+    end
+
+    -- Initialise additional data
+    local placeable_type = ini_sys:r_string_ex(placeable_section, "placeable_type") or "prop"
+    local type_functor = hf_furniture_types.get_func(placeable_type)
+    if type_functor then
+        type_functor(obj.id)
+    end
+
+    -- Remove flags
+    local data = utils_stpk.get_physic_data(obj)
+    local remove_flags = 128
+    local flag_mask = bit_not(remove_flags)
+    data.object_flags = bit_and(data.object_flags, flag_mask)
+
+    utils_stpk.set_physic_data(data, obj)
+
+    return obj.id
+end
+
+function transfer_item_data(item_id, obj_id)
+    if not item_id or not obj_id then return end
+
+    -- Copy data from item to obj and delete item data
+    local hf_data = hf_obj_manager.get_data(item_id)
+    if hf_data then
+        hf_obj_manager.update_data(obj_id, hf_data)
+        hf_obj_manager.delete_data(item_id)
+    end
+
+    -- Update condition if item is online
+    local item = get_object_by_id(item_id)
+    if not item then return end
+    hf_obj_manager.update_data(obj_id, {condition=item:condition()})
+end
+
+---------------------
+-- Placement System
+---------------------
+local function actor_on_update()
+    if not in_placing_state() then return end
+
+    local cam_pos = nil
+    local cam_dir = nil
+    local dist = nil
+    if is_state(states.HOLDING) then
+        cam_pos = device().cam_pos
+        cam_dir = device().cam_dir
+        dist = level.get_target_dist()
+    else
+        cam_pos = player_pos
+        cam_dir = player_dir
+        dist = player_dist
+    end
+
+    -- get position of point that the player is looking at
+    local pos = vector()
+    pos:mad(cam_pos, cam_dir,dist)
+    
+    -- rotate to point towards player + offset
+    if align_state == align_states.ACTOR then
+        local rot = cam_dir:getH() + (((base_rot+rotation_offset) * math.pi) / 180)
+        local q0 = aol_rotation.get_rotation_around(vector():set(0, 1, 0), rot)
+        
+        bbox.rotation = q0
+
+        local angle = cam_dir:getH()
+    
+        -- Rotate vector about y
+        local c = math.cos (angle)
+        local s = math.sin (angle)
+        local rotated_x = location_offset.x * c - location_offset.z * s
+        local rotated_z = location_offset.x * s + location_offset.z * c
+        pos:add(vector():set(rotated_x,
+                                location_offset.y,
+                                rotated_z))
+        
+        -- automatic alignment to surface
+    elseif align_state == align_states.SURFACE then
+        -- Rotation
+        local rot_z = ((base_rot+rotation_offset) * math.pi) / 180
+        local u = vector():set(0, 1, 0)
+        local v = demonized_geometry_ray.get_surface_normal(cam_pos, cam_dir)
+        if not v then return end
+        
+        -- rotate from upwards vector to normal vector on surface
+        local q0 = aol_rotation.get_rotation_between(u, v)
+        -- rotate to point downwards + offset
+        local q1 = aol_rotation.get_rotation_around(v, v:getH() + rot_z + math.pi)
+        -- perform each rotation in succession
+        local q = aol_rotation.Quaternion():multiply(q0):multiply(q1)
+        
+        -- Location
+        local q1_2 = aol_rotation.get_rotation_around(v, v:getH() + math.pi)
+        local q_loc = aol_rotation.Quaternion():multiply(q0):multiply(q1_2)
+        local rotated_loc_offset = q_loc:rotate_vector(location_offset)
+        
+        bbox.rotation = q
+        pos:add(rotated_loc_offset)
+    end
+    bbox:SetWorldOrigin(vector():set(pos))
+
+    -- Update position of vertices in bounding box
+    bbox:UpdateBBox()
+    if check_collision then
+        bbox:CheckForCollisions()
+    else
+        bbox.is_colliding = false
+    end
+    bbox_drawer:DrawBShapeCollider(bbox)
+    place_coordinates = pos
+end
+
+local direction_keys = {
+	[key_bindings.kFWD] = true,
+	[key_bindings.kBACK] = true,
+	[key_bindings.kL_STRAFE] = true,
+	[key_bindings.kR_STRAFE] = true,
+	[key_bindings.kCROUCH] = true,
+	[key_bindings.kACCEL] = true,
+    [key_bindings.kWPN_FIRE] = true,
+    [key_bindings.kWPN_ZOOM] = true,
+    [key_bindings.kL_LOOKOUT] = true,
+    [key_bindings.kR_LOOKOUT] = true,
+    [key_bindings.kJUMP] = true,
+    [key_bindings.kQUIT] = true,
+	[7] = true,
+    [key_bindings.kCONSOLE] = true,
+}
+
+---@return game_object|nil
+local function get_obj_at_crosshair()
+    if level.get_target_dist() > 5 then return end
+    local obj = level.get_target_obj()
+    if not obj then return end
+    return obj
+end
+
+---@return hf_binder_wrapper|nil
+local function get_wrapper_at_crosshair()
+    local obj = get_obj_at_crosshair()
+    if not obj then return end
+    local binder = obj:binded_object()
+    if not binder then return end
+    
+    local wrapper = binder.wrapper
+    if not wrapper then return end
+    return wrapper
+end
+
+local function on_key_hold(dik)
+    if dik_to_bind(dik) ~= key_bindings.kUSE then return end
+    if Check_UI("UIRadialMenu") then return end
+    if not in_placing_state() then
+        if ui_mcm.key_hold("hf_interact_adv", dik) then
+            local wrapper = get_wrapper_at_crosshair()
+            if not wrapper then return end
+            open_interact_gui(wrapper)
+        end
+    end
+end
+
+local function on_key_press(dik)
+    if dik_to_bind(dik) == key_bindings.kUSE then
+        if Check_UI("UIRadialMenu") then return end
+        if not in_placing_state() then
+            ui_mcm.simple_press("hf_interact_simple", dik, function ()
+                local wrapper = get_wrapper_at_crosshair()
+                if not wrapper then return end
+                wrapper:use_callback_simple()
+            end)
+        end
+    end
+    if dik == key_place then
+        if in_placing_state() then
+            -- Prevent placement if target pos is too far away
+            if level.get_target_dist() > 5 and not DEV_DEBUG then
+                print_msg("st_far_popup")
+                pr("Cannot place object that far away - max range of 5 units")
+                return
+            end
+
+            -- Prevent placement if bounding box is colliding with something
+            if bbox.is_colliding then
+                print_msg("st_collision_warning")
+                return
+            end
+
+            local obj_id = create_object(phy_obj_section, place_coordinates, bbox.rotation)
+            if obj_id then transfer_item_data(item_id, obj_id) end
+
+            -- Record in debug mode
+            -- hf_map_objects.add_obj_prompt(phy_obj_section, place_coordinates, db.actor:level_vertex_id(), db.actor:game_vertex_id(), vector():set(bbox.rotation:to_euler_angles()))
+
+            place_sound:play_no_feedback(db.actor, sound_object.s3d, 0, place_coordinates, 1.0, 1.0)
+            bbox_drawer:Stop()
+
+            -- Reset variables
+            base_rot = 0
+            phy_obj_section = nil
+
+            -- Delete item
+            if item_id then
+                alife():release(alife():object(item_id), true)
+                item_id = nil
+            end
+
+            set_state(states.IDLE)
+            pr("state=PLACING")
+        end
+    elseif dik == key_toggle_collision then
+        if in_placing_state() then
+            check_collision = not check_collision
+            if check_collision then
+                print_msg("st_enable_collision")
+            else
+                print_msg("st_disable_collision")
+            end
+        end
+    elseif dik == key_toggle_align then
+        if in_placing_state() then
+            if align_state == align_states.ACTOR then
+                align_state = align_states.SURFACE
+                print_msg("st_align_surface")
+            elseif align_state == align_states.SURFACE then
+                align_state = align_states.ACTOR
+                print_msg("st_align_actor")
+            end
+        end
+    elseif dik == DIK_keys.DIK_HOME then
+        if state == states.IDLE then
+            return
+        elseif state == states.HOLDING or
+               state == states.PREVIEW then
+            set_state(states.ADV_CTRL)
+        end
+        open_gui()
+    else
+        local bind = dik_to_bind(dik)
+        if state ~= states.IDLE and not direction_keys[bind] then
+            pr("Interrupting placement")
+            set_state(states.IDLE)
+            bbox_drawer:Stop()
+        end
+    end
+end
+
+-- Cancel placement state with ESCAPE key
+-- turns out this fires after on_key_press
+local function on_before_key_press(key, bind, dis, flags)
+    if bind == key_bindings.kQUIT and
+      (is_state(states.HOLDING) or is_state(states.PREVIEW)) then
+        printf("QUITTING")
+        flags.ret_value = false
+        set_state(states.IDLE)
+        bbox_drawer:Stop()
+    end
+end
+
+------
+
+function place_item(obj)
+    return gc("st_place_furniture")
+end
+
+function func_place_item(obj)
+    item_id = obj:id()
+    if state == states.IDLE then
+        db.actor:activate_slot(0)
+        hide_hud_inventory()
+        pr("USING ITEM TO PLACE")
+        set_state(states.HOLDING)
+        pr("state=HOLDING")
+        print_msg("st_place_popup")
+        phy_obj_section = ini_sys:r_string_ex(obj:section(), "placeable_section") or nil
+        if phy_obj_section == nil then
+            pr("No section of physical object to place")
+        end
+
+        local bbox_size_str = ini_sys:r_string_ex(phy_obj_section, "bounding_box_size", "0.5,0.5,0.5")
+        local bbox_size = str_explode(bbox_size_str,",")
+        local bbox_origin_str = ini_sys:r_string_ex(phy_obj_section, "bounding_box_origin", "0,0.25,0")
+        local bbox_origin = str_explode(bbox_origin_str,",")
+        base_rot = ini_sys:r_float_ex(phy_obj_section, "base_rotation", 0) or 0
+        base_loc = vector():set(tonumber(bbox_origin[1]), tonumber(bbox_origin[2]), tonumber(bbox_origin[3]))
+
+        ---@type bbox_collider
+        bbox = hf_bbox.bbox_collider(tonumber(bbox_size[1]), tonumber(bbox_size[2]), tonumber(bbox_size[3]))
+
+        bbox:OffsetVertices(base_loc)
+
+        local crosshair_vertex = bbox:GetCrosshairVertex()
+        crosshair_vertex:sub(base_loc)
+        bbox:SetCrosshairVertex(crosshair_vertex)
+    end
+end
+
+------
+-- Helper to determine if item is a placeable furniture that requires fuel
+-- function is_fueled_furniture(obj)
+--     local section = obj and obj:section() or false
+--     if section then
+--         return SYS_GetParam(0, section, "placeable_type") and SYS_GetParam(0, section, "use_condition")
+--     end
+--     return false
+-- end
+
+-- Monkey patch for adding fuel amount on items // DEPRECATED: using item_device binder instead, which makes these items devices
+-- local clr_r  = utils_xml.get_color("d_red")
+-- local clr_g  = utils_xml.get_color("d_green")
+-- local clr_y  = utils_xml.get_color("yellow")
+
+-- local clr_2  = utils_xml.get_color("ui_gray_1")
+-- original_build_desc_header = ui_item.build_desc_header
+-- function ui_item.build_desc_header(obj, sec, str)
+-- 	local _str = ""
+-- 	local _str2 = original_build_desc_header(obj, sec, str)
+
+--     -- display power + psu
+-- 	if obj and is_fueled_furniture(obj) then
+--         local fuel = math.ceil(obj:condition() * 100)
+--         local clr = utils_xml.get_color_con(fuel)
+--         _str = clr .. " � " .. clr_2 .. gc("st_fuel") .. ": " .. clr .. tostring(fuel) .. "%" .. "\\n \\n" .. clr_2
+--     end
+-- 	_str = _str .. _str2
+
+-- 	return _str
+-- end
+
+-------
+-- UI
+-------
+-- Advanced Controls
+---@class UIAdvancedControls
+GUI = nil -- instance, don't touch
+function open_gui()
+	if not DEV_DEBUG then
+		return
+	end
+	
+	hide_hud_inventory()
+
+	if (not GUI) then
+		GUI = UIAdvancedControls()
+	end
+	if (GUI) and (not GUI:IsShown()) then
+        GUI:Reset()
+		GUI:ShowDialog(true)
+		Register_UI("UIAdvancedControls","hf_advanced_controls")
+	end
+end
+
+class "UIAdvancedControls" (CUIScriptWnd)
+
+function UIAdvancedControls:__init() super()
+    self:AllowMovement(true)
+	self:InitControls()
+	self:InitCallBacks()
+
+    self.states = {
+        IDLE = 1,
+        XZ_DRAG_LOC = 2,
+        Y_DRAG_LOC = 3,
+        Y_DRAG_ROT = 4,
+    }
+    self.state = self.states.IDLE
+    self.snap = false
+    
+    self.pos = {x=0, y=0}
+    self.prev_pos = nil
+    self.prev_offset = vector():set(location_offset)
+
+    self.init = false
+end
+
+function UIAdvancedControls:__finalize()
+end
+
+function UIAdvancedControls:KeyPress(dik, kb_action)
+    local funcs = self.key_to_functor[dik]
+    if funcs then
+        local func = funcs[kb_action]
+        if func then func() end
+    end
+end
+
+function UIAdvancedControls:InitControls()
+	self:SetWndRect(Frect():set(0,0,1024,768))
+	self:SetAutoDelete(true)
+
+    -- Questionable table, but i got tired of if-elses
+    self.key_to_functor = {
+        -- XZ Displacement
+        [DIK_keys.MOUSE_1] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                self.state = self.state == self.states.IDLE and self.states.XZ_DRAG_LOC or self.state
+            end,
+            [ui_events.WINDOW_KEY_RELEASED] = function()
+                self.prev_offset = vector():set(location_offset)
+                self.state = self.states.IDLE
+                self.prev_pos = nil
+            end
+        },
+        -- Y Displacement
+        [DIK_keys.DIK_LSHIFT] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                self.state = self.state == self.states.IDLE and self.states.Y_DRAG_LOC or self.state
+            end,
+            [ui_events.WINDOW_KEY_RELEASED] = function()
+                self.prev_offset = vector():set(location_offset)
+                self.state = self.states.IDLE
+                self.prev_pos = nil
+            end
+        },
+        -- Y Rotation
+        [DIK_keys.MOUSE_2] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                self.state = self.state == self.states.IDLE and self.states.Y_DRAG_ROT or self.state
+            end,
+            [ui_events.WINDOW_KEY_RELEASED] = function()
+                self.prev_rot = rotation_offset
+                self.state = self.states.IDLE
+                self.prev_pos = nil
+            end
+        },
+        -- Finer control, adjust at 1/10th speed
+        [DIK_keys.DIK_LCONTROL] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                self.fine_control = true
+            end,
+            [ui_events.WINDOW_KEY_RELEASED] = function()
+                self.fine_control = false
+            end
+        },
+        -- SNAP
+        [DIK_keys.DIK_LMENU] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                self.snap = true
+            end,
+            [ui_events.WINDOW_KEY_RELEASED] = function()
+                self.snap = false
+            end
+        },
+        -- Place
+        [key_place] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                on_key_press(key_place)
+                self:Close()
+            end
+        },
+        -- Toggle Collision
+        [key_toggle_collision] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                on_key_press(key_toggle_collision)
+            end
+        },
+        -- Toggle Alignment mode
+        [key_toggle_align] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                on_key_press(key_toggle_align)
+            end
+        },
+        -- Swap to PREVIEW mode
+        [DIK_keys.DIK_HOME] = {
+            [ui_events.WINDOW_KEY_PRESSED] = function()
+                set_state(states.PREVIEW)
+                self:Close()
+            end
+        }
+    }
+end
+
+function UIAdvancedControls:InitCallBacks()
+end
+
+function UIAdvancedControls:Reset()
+    self.state = self.states.IDLE
+    self.snap = false
+    
+    self.pos = {x=0, y=0}
+    self.prev_pos = nil
+
+    self.prev_offset = vector():set(location_offset)
+    self.location_offset_copy = vector():set(location_offset)
+
+    self.prev_rot = rotation_offset
+    self.prev_rot_copy = rotation_offset
+
+    self.init = false
+end
+
+function UIAdvancedControls:Update()
+	CUIScriptWnd.Update(self)
+    if self.state == self.states.IDLE then return end
+    
+    if self.prev_pos == nil then
+        self.prev_pos = GetCursorPosition()
+    end
+    
+    local mouse_pos = GetCursorPosition()
+    local diff_x = (mouse_pos.x - self.prev_pos.x)
+    local diff_y = -(mouse_pos.y - self.prev_pos.y)
+
+    if self.fine_control then
+        diff_x = diff_x / 10
+        diff_y = diff_y / 10
+    end
+
+    if self.state == self.states.XZ_DRAG_LOC then
+        diff_x = diff_x / 200
+        diff_y = diff_y / 200
+
+        if self.snap then
+            if math.abs(diff_x) > math.abs(diff_y) then
+                diff_y = 0
+            else
+                diff_x = 0
+            end
+        end
+		location_offset = vector():set(self.prev_offset.x+diff_x, self.prev_offset.y, self.prev_offset.z+diff_y)
+    elseif self.state == self.states.Y_DRAG_LOC then
+        diff_y = diff_y / 200
+
+		location_offset = vector():set(self.prev_offset.x, self.prev_offset.y+diff_y, self.prev_offset.z)
+    elseif self.state == self.states.Y_DRAG_ROT then
+        diff_x = diff_x/2
+        rotation_offset = self.prev_rot + diff_x
+        
+        if self.snap then
+            local n = 15
+            rotation_offset = (rotation_offset % n) > n/2 and rotation_offset + n - rotation_offset%n or rotation_offset - rotation_offset%n
+        end
+    end
+end
+
+function UIAdvancedControls:OnKeyboard(dik, keyboard_action)
+	local res = CUIScriptWnd.OnKeyboard(self,dik,keyboard_action)
+    if not self.init then
+        self.init = true
+        return
+    end
+	if (res == false) then
+        self:KeyPress(dik, keyboard_action)
+		if keyboard_action == ui_events.WINDOW_KEY_PRESSED then
+			if dik == DIK_keys.DIK_ESCAPE then
+                if self.state == self.states.IDLE then
+                    location_offset = vector():set(self.location_offset_copy)
+                    rotation_offset = self.prev_rot_copy
+                    set_state(states.HOLDING)
+                    self:Close()
+                else
+                    location_offset = vector():set(self.prev_offset)
+                    rotation_offset = self.prev_rot
+                    self.state = self.states.IDLE
+                end
+            end
+        end
+	end
+	return res
+end
+
+function UIAdvancedControls:Close()
+	self:HideDialog()
+	Unregister_UI("UIAdvancedControls")
+end
+
+-- Advanced Interaction Menu
+---@class UIRadialMenu
+RadialGUI = nil
+
+function create_interact_gui()
+    ---@class UIRadialMenu
+    local RadialGUI = arm.UIRadialMenu()
+
+    -- Pickup
+    ---@class OptionData
+    local opt_pickup = arm.OptionData("opt_pickup", function (state) 
+        return arm.get_stateful_texture("ui_hf_radial_icon_pickup", state)
+    end)
+    opt_pickup:SetColour(function (state)
+        return arm.get_stateful_colour(state) -- stateful colour
+    end) -- stateful colour
+
+    -- Text
+    opt_pickup:SetText({title = "Pick Up",
+                     description = "Does nothing :)"})
+    
+    -- Open UI
+    ---@class OptionData
+    local opt_ui = arm.OptionData("opt_use", function (state) 
+        return arm.get_stateful_texture("ui_hf_radial_icon_use", state)
+    end)
+    opt_ui:SetColour(function (state)
+        return arm.get_stateful_colour(state) -- stateful colour
+    end) -- stateful colour
+
+    -- Text
+    opt_ui:SetText({title = "Open Advanced UI",
+                     description = "Does nothing :)"})
+    
+    -- Freeze/Unfreeze
+    ---@class OptionData
+    local opt_freeze = arm.OptionData("opt_freeze", function(state)
+        if state == arm.States.HIGHLIGHTED then
+            return "ui_hf_radial_icon_frozen"
+        else
+            return "ui_hf_radial_icon_unfrozen"
+        end
+    end)
+    opt_freeze:SetColour(function (state)
+        return arm.get_stateful_colour(state) -- stateful colour
+    end) -- stateful colour
+
+    -- Text
+    opt_freeze:SetText({title = "Toggle Freeze",
+                     description = "Does nothing :)"})
+    
+    -- Upgrade
+    ---@class OptionData
+    local opt_upgrade = arm.OptionData("opt_upgrade", "ui_hf_radial_icon_upgrade")
+    opt_upgrade:SetColour(function (state)
+        return arm.get_stateful_colour(state) -- stateful colour
+    end) -- stateful colour
+
+    -- Text
+    opt_upgrade:SetText({title = "Upgrade",
+                     description = "Does nothing :)"})
+    opt_upgrade:SetState(arm.States.DISABLED)
+    
+    -- Wire Connections
+    ---@class OptionData
+    local opt_connections = arm.OptionData("opt_connections", "ui_hf_radial_icon_connections")
+    opt_connections:SetColour(function (state)
+        return arm.get_stateful_colour(state) -- stateful colour
+    end)
+    -- Text
+    opt_connections:SetText({title = "Manage Connections",
+                     description = "Does nothing :)"})
+    opt_connections:SetState(arm.States.DISABLED)
+
+    RadialGUI:RegisterCallback("opt_pickup", function ()
+        local obj = get_obj_at_crosshair()
+        if not obj then return end
+        pickup_obj(obj)
+    end)
+    RadialGUI:RegisterCallback("opt_use", function ()
+        local wrapper = get_wrapper_at_crosshair()
+        if not wrapper then return end
+        wrapper:use_callback()
+    end)
+    RadialGUI:RegisterCallback("opt_freeze", function ()
+        local wrapper = get_wrapper_at_crosshair()
+        if not wrapper then return end
+        
+        wrapper:set_frozen(not wrapper.is_frozen)
+        if wrapper.is_frozen then
+            opt_freeze:SetState(arm.States.HIGHLIGHTED)
+        else
+            opt_freeze:SetState(arm.States.ENABLED)
+        end
+    end)
+
+    RadialGUI:AddOption(opt_ui)
+    RadialGUI:AddOption(opt_pickup)
+    RadialGUI:AddOption(opt_freeze)
+    RadialGUI:AddOption(opt_upgrade)
+    RadialGUI:AddOption(opt_connections)
+
+    RadialGUI:DrawOptions()
+
+    return RadialGUI
+end
+
+---@param wrapper hf_binder_wrapper
+function update_radial_gui(wrapper)
+    local is_pickupable = wrapper:is_pickupable()
+    if is_pickupable then
+        RadialGUI:GetOption("opt_pickup"):SetState(arm.States.ENABLED)
+    else
+        RadialGUI:GetOption("opt_pickup"):SetState(arm.States.DISABLED)
+    end
+    
+    local type = hf_furniture_types.get_type(wrapper.object)
+    if type == "prop" or type == nil then
+        RadialGUI:GetOption("opt_use"):SetState(arm.States.DISABLED)
+    else
+        RadialGUI:GetOption("opt_use"):SetState(arm.States.ENABLED)
+    end
+
+    if wrapper.is_frozen then
+        RadialGUI:GetOption("opt_freeze"):SetState(arm.States.HIGHLIGHTED)
+    else
+        RadialGUI:GetOption("opt_freeze"):SetState(arm.States.ENABLED)
+    end
+end
+
+---@param wrapper hf_binder_wrapper
+function open_interact_gui(wrapper)
+	hide_hud_inventory()
+
+	if (not RadialGUI) then
+		RadialGUI = create_interact_gui()
+	end
+	if (RadialGUI) and (not RadialGUI:IsShown()) then
+        update_radial_gui(wrapper)
+		RadialGUI:ShowDialog(true)
+
+        _GUIs_keyfree["UIRadialMenu"] = true
+		Register_UI("UIRadialMenu","placeable_furniture")
+	end
+end
+
+-------
+
+function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_option_change callback
+	if mcm then
+        key_toggle_collision = ui_mcm.get("aol_hf/bind_collision") or key_toggle_collision
+        key_toggle_align = ui_mcm.get("aol_hf/bind_alignment") or key_toggle_align
+	end
+    key_place = bind_to_dik(key_bindings.kUSE)
+end
+
+-- Allow drag n drop of fuel onto furniture items
+local function on_item_drag_dropped(obj_b, obj_d, slot_from, slot_to)
+
+	-- Check capability
+	if not (slot_from == EDDListType.iActorBag and (slot_to == EDDListType.iActorBag or slot_to == EDDListType.iActorSlot)) then
+        return
+    end
+
+	local sec_b = obj_b:section() -- fuel
+	local sec_d = obj_d:section() -- light source
+
+    local req_fuel = ini_sys:r_string_ex(sec_d, "fuel_section")
+	if req_fuel and (sec_b == req_fuel) then
+        if sec_b == "batteries_dead" then
+            alife_create_item("batteries_dead", db.actor, {cond=obj_d:condition()})
+            obj_d:set_condition(obj_b:condition())
+        else
+            utils_item.discharge(obj_b, 1)
+            obj_d:set_condition(1.0)
+        end
+
+		utils_obj.play_sound("interface\\items\\inv_items_generic_1")
+	end
+end
+
+---@param obj game_object
+function pickup_obj(obj)
+    ---@type hf_binder_wrapper
+	local wrapper = bind_hf_base.get_wrapper(obj:id())
+    if wrapper:is_pickupable() then
+        wrapper:pickup()
+        print_msg("Picked up object")
+    end
+end
+
+
+-------
+
+function on_game_start()
+    RegisterScriptCallback("on_option_change",on_option_change)
+    on_option_change(mcm_keybinds)
+
+	RegisterScriptCallback("on_key_press", on_key_press)
+    RegisterScriptCallback("on_key_hold", on_key_hold)
+    RegisterScriptCallback("on_before_key_press", on_before_key_press)
+    RegisterScriptCallback("actor_on_update", actor_on_update)
+    RegisterScriptCallback("ActorMenu_on_item_drag_drop", on_item_drag_dropped)
+end

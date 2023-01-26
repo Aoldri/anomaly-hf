@@ -1,0 +1,35 @@
+local trade_table = {
+	["all"] = {
+		[1] = {
+			["pistol_shelf_item"] = 1,
+            ["weapon_rack_item"] = 1,
+		},
+        [2] = {
+            ["pistol_shelf_item"] = 2,
+            ["weapon_rack_item"] = 2,
+        },
+        [3] = {
+            ["pistol_shelf_item"] = 3,
+            ["weapon_rack_item"] = 3,
+        }
+	},
+}
+
+function spawn_items(npc)
+    local is_supplier = trader_autoinject.get_trader_type(npc) == trader_autoinject.SUPPLIER
+    if is_supplier then
+        local trader_table = trade_table["all"]
+        local supply_level = clamp(trader_autoinject.supply_level(npc, true) or 1, 1, 3)
+
+        if trader_table[supply_level] then
+            trader_autoinject.spawn_items(npc, trader_table[supply_level], true)
+        end
+    end
+end
+
+TraderAuto = trader_autoinject.update
+
+function trader_autoinject.update(npc)
+    TraderAuto(npc)
+    spawn_items(npc)
+end

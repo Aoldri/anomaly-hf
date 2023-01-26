@@ -1,0 +1,27 @@
+{
+	"preconditions": {
+	},
+	"disabled":false,
+	"setup": [
+		{
+			"entity_type":"item",
+			"target": "repair",
+			"section":"&TableValueRandom(f_hf_weapon_repair)&",
+			"online_activities":
+				{"obj_available":
+					{"break_item":true}
+				},
+			"where":0,
+			"to_create": true
+		}
+	],
+	"rewards_completed": {
+		"money": 0,
+		"goodwill": {
+			"value": 25
+		},
+		"items": {
+			"workshop_item": 1
+		}
+	}
+}

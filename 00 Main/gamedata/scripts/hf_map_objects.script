@@ -1,0 +1,220 @@
+local mcm_keybinds = ui_mcm and ui_mcm.key_hold
+local record_obj = false
+
+---@class UIRecordObj
+GUI = nil -- instance, don't touch
+function add_obj_prompt(section, position, level_vertex_id, game_vertex_id, rotation)
+	if not DEV_DEBUG and not record_obj then
+		return
+	end
+
+	hide_hud_inventory()
+
+	if (not GUI) then
+		GUI = UIRecordObj()
+	end
+
+	if (GUI) and (not GUI:IsShown()) then
+		GUI:ShowDialog(true)
+		GUI:Reset(section, position, level_vertex_id, game_vertex_id, rotation)
+
+		Register_UI("UIRecordObj","hf_record_obj")
+	end
+end
+
+------------------------------------------------------------------
+-- UI
+-------------------------------------------------------------------
+class "UIRecordObj" (CUIScriptWnd)
+
+function UIRecordObj:__init() super()
+	self:InitControls()
+	self:InitCallBacks()
+end
+
+function UIRecordObj:__finalize()
+end
+
+function UIRecordObj:InitControls()
+	self:SetWndRect(Frect():set(0,0,1024,768))
+	self:SetAutoDelete(true)
+	--self:Enable(true)
+
+	local xml					= CScriptXmlInit()
+	xml:ParseFile				("ui_items_backpack.xml")
+
+	self.dialog					= xml:InitStatic("backpack", self)
+	xml:InitStatic("backpack:background", self.dialog)
+
+	self.input = xml:InitEditBox("backpack:input",self.dialog)
+	self:Register(self.input,"fld_input")
+
+	local btn = xml:Init3tButton("backpack:btn_cancel", self.dialog)
+	self:Register(btn,"btn_cancel")
+
+	btn = xml:Init3tButton("backpack:btn_ok", self.dialog)
+	self:Register(btn,"btn_ok")
+end
+
+function UIRecordObj:InitCallBacks()
+	self:AddCallback("btn_ok", ui_events.BUTTON_CLICKED, self.OnAccept, self)
+	self:AddCallback("btn_cancel", ui_events.BUTTON_CLICKED, self.Close, self)
+end
+
+function UIRecordObj:Reset(section, position, level_vertex_id, game_vertex_id, rotation)
+	self.input:SetText("")
+    self.section = section
+    self.position = position
+    self.level_vertex_id = level_vertex_id
+    self.game_vertex_id = game_vertex_id
+    self.rotation = rotation
+
+end
+
+function UIRecordObj:Update()
+	CUIScriptWnd.Update(self)
+end
+
+function UIRecordObj:OnAccept()
+    local spawn_name = self.input:GetText()
+
+    add_obj_to_ltx(level.name(), spawn_name, self.section, self.position, self.level_vertex_id, self.game_vertex_id, self.rotation)
+	self:Close()
+end
+
+function UIRecordObj:OnKeyboard(dik, keyboard_action)
+	local res = CUIScriptWnd.OnKeyboard(self,dik,keyboard_action)
+	if (res == false) then
+		if keyboard_action == ui_events.WINDOW_KEY_PRESSED then
+			if dik == DIK_keys.DIK_ESCAPE then
+				self:Close()
+			end
+		end
+	end
+	return res
+end
+
+function UIRecordObj:Close()
+	self:HideDialog()
+
+	Unregister_UI("UIRecordObj")
+end
+
+----------------------------------
+-- Storing object data to LTX
+----------------------------------
+function placement_data_to_string(section, position, level_vertex_id, game_vertex_id, rotation)
+    return section .. "," ..
+           position.x .. "," .. position.y .. "," .. position.z .. "," ..
+           level_vertex_id .. "," ..
+           game_vertex_id .. "," ..
+           rotation.x .. "," .. rotation.y .. "," .. rotation.z
+end
+
+function add_obj_to_ltx(level_name, spawn_name, section, position, level_vertex_id, game_vertex_id, rotation)
+    local ini_cc = ui_debug_launcher.ini_cc
+	if spawn_name == nil or spawn_name == "" then
+		spawn_name = os.date("%Y/%m/%d-%H:%M:%S")
+	end
+    ini_cc:w_value(level_name, spawn_name, placement_data_to_string(section, position, level_vertex_id, game_vertex_id, rotation))
+    ini_cc:save()
+end
+
+----------------------------------
+-- Spawning objects on new game
+----------------------------------
+
+local ini_map_objects = ini_file_ex("plugins\\world_objects\\objects.ltx")
+local world_obj_ids = {}
+local hf_obj_spawned = false
+
+local obj_tbl = {}
+local j = 1
+for _, section in pairs(ini_map_objects:get_sections()) do
+	local n = ini_map_objects.ini:line_count(section)
+	world_obj_ids[section] = {}
+    for i=0,n-1 do
+        local result, id, value	= ini_map_objects.ini:r_line_ex(section,i)
+        local p = str_explode(value,",")
+        if (p) then
+            obj_tbl[j] = {p[1],
+                        vector():set(tonumber(p[2]), tonumber(p[3]), tonumber(p[4])),
+                        tonumber(p[5]), tonumber(p[6]),
+                        vector():set(tonumber(p[7]), tonumber(p[8]), tonumber(p[9])),
+						section
+                    }
+			j = j + 1
+        end
+    end
+end
+
+-- function update_obj_binder(obj_id)
+-- 	local obj = get_object_by_id(obj_id)
+--     if not (obj) then
+--         return
+--     end
+--     if not (obj.get_hanging_lamp) then
+--         return
+--     end
+
+--     local binder = obj:binded_object()
+--     if not binder then
+--         return
+--     end
+
+--     binder.infinite_fuel = true
+-- 	binder.is_world_obj = true
+--     return true
+-- end
+
+function actor_on_first_update()
+	if hf_obj_spawned then
+	-- 	for _, obj_id in pairs(world_obj_ids[level.name()]) do
+	-- 		CreateTimeEvent("HFWorldObjects","UpdateObj" .. obj_id, 0, update_obj_binder, obj_id)
+	-- 	end
+		return
+	end
+
+	-- Spawn world objects
+	for k, v in pairs(obj_tbl) do
+		local section = v[1]
+		local location = v[2]
+		local rotation = v[5]
+		local lvid = v[3]
+		local gvid = v[4]
+
+		local obj_id = placeable_furniture.create_object(section, location, rotation, lvid, gvid)
+		if not obj_id then return end
+		hf_obj_manager.update_data(obj_id, {is_world_obj=true})
+	end
+
+	hf_obj_spawned = true
+end
+
+function save_state(m_data)
+	printf("save_state(m_data)")
+    m_data.hf_obj_spawned = hf_obj_spawned
+	m_data.world_obj_ids = {}
+	copy_table(m_data.world_obj_ids, world_obj_ids)
+end
+
+function load_state(m_data)
+	printf("load_state(m_data)")
+    hf_obj_spawned = m_data.hf_obj_spawned
+	world_obj_ids = m_data.world_obj_ids or world_obj_ids
+end
+
+function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_option_change callback
+	if mcm then
+		record_obj = ui_mcm.get("aol_hf/record_obj")
+	end
+end
+
+function on_game_start()
+	RegisterScriptCallback("on_option_change",on_option_change)
+    on_option_change(mcm_keybinds)
+
+	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
+	RegisterScriptCallback("save_state",save_state)
+	RegisterScriptCallback("load_state",load_state)
+end

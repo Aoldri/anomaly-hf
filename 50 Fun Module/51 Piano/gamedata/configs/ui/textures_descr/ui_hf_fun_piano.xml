@@ -1,0 +1,14 @@
+<w>
+	<file name="ui\ui_placeable_furniture">
+		<!-- Background -->
+		<texture id="ui_inGame2_piano_bg" x="0" y="600" width="1024" height="286" />
+		<!-- White Key: Idle -->
+		<texture id="ui_inGame2_piano_whitekey_off" x="512" y="435" width="27" height="164" />
+		<!-- White Key: Pressed -->
+		<texture id="ui_inGame2_piano_whitekey_on" x="540" y="435" width="27" height="164" />
+		<!-- Black Key: Idle -->
+		<texture id="ui_inGame2_piano_blackkey_off" x="567" y="435" width="17" height="109" />
+		<!-- Black Key: Idle -->
+		<texture id="ui_inGame2_piano_blackkey_on" x="584" y="435" width="17" height="109" />
+	</file>
+</w>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>	
+    <string id="ui_mcm_menu_aol_hf">
+        <text>Hideout Furniture</text>
+    </string>
+
+	<string id="ui_mcm_aol_hf_bind_collision">
+		<text>Toggle Collision Checking</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_bind_alignment">
+		<text>Switch between alignment modes: Player and Surface</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_use_ingame_time">
+		<text>Lights Show In-game Time</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_record_obj">
+		<text>Record Placed Objects in LTX</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_update_mcm">
+		<text>Update MCM to set keybinds. Defaults to TAB for collision toggle, and CAPS LOCK for alignment toggle.</text>
+	</string>
+</string_table>

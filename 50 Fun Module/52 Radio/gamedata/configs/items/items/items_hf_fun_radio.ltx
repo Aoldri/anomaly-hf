@@ -1,0 +1,31 @@
+[radio_item]:tch_junk
+class									= II_ATTCH
+kind								    = i_tool
+visual									= dynamics\equipments\trade\radio.ogf
+description								= st_placeable_radio_descr
+inv_name								= st_placeable_radio
+inv_name_short							= st_placeable_radio
+inv_grid_x								= 3
+inv_grid_y								= 0
+inv_grid_height							= 1
+inv_grid_width							= 2
+icons_texture							= ui\placeable_devices
+cost									= 1500
+inv_weight								= 0.4
+
+use1_functor         				    = placeable_furniture.place_item
+use1_action_functor  					= placeable_furniture.func_place_item
+
+placeable_type                          = radio
+placeable_section                       = placeable_radio
+
+
+[placeable_radio]: physic_object
+visual                                   = dynamics\equipments\trade\radio.ogf
+inv_weight                               = 0.82
+
+script_binding                           = placeable_radio.init
+item_section                             = radio_item
+
+bounding_box_size                        = 0.246364, 0.077087, 0.181311
+bounding_box_origin                      = 0.000007, 0.090656, -0.002656

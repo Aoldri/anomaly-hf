@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="st_placeable_case">
+		<text>Gun Case</text>
+	</string>
+	<string id="st_placeable_case_descr">
+		<text>An empty gun case void of any weaponry. It provides more space than conventional backpacks at the cost of weight.\n \n
+			%c[ui_gray_1]PROPERTIES:\n
+			%c[d_blue] • %c[ui_gray_2] item storage\n
+			%c[d_blue] • %c[ui_gray_2] placeable item\n
+			%c[d_blue] • %c[ui_gray_2] moderate capacity\n
+			%c[0,100,255,150] • %c[ui_gray_2] usable as stash\n</text>
+	</string>
+
+	<string id="st_placeable_blue_box">
+		<text>Metal Box</text>
+	</string>
+	<string id="st_placeable_blue_box_descr">
+		<text>A spacious metal box dedicated for storing items. It provides the most space compared to alternatives, but its bulky container makes it harder to transport.\n \n
+			%c[ui_gray_1]PROPERTIES:\n
+			%c[d_blue] • %c[ui_gray_2] item storage\n
+			%c[d_blue] • %c[ui_gray_2] placeable item\n
+			%c[d_blue] • %c[ui_gray_2] high capacity\n
+			%c[0,100,255,150] • %c[ui_gray_2] usable as stash\n</text>
+	</string>
+
+	<string id="st_placeable_exo_kit">
+		<text>Empty Exoskeleton Repair Kit</text>
+	</string>
+	<string id="st_placeable_exo_kit_descr">
+		<text>An empty case stripped of any useful items. Many stalkers simply discard these repair kits after tending to their high tech suits, though the capacity and size of this one is useful when reused as storage.\n \n
+			%c[ui_gray_1]PROPERTIES:\n
+			%c[d_blue] • %c[ui_gray_2] item storage\n
+			%c[d_blue] • %c[ui_gray_2] placeable item\n
+			%c[d_blue] • %c[ui_gray_2] moderate capacity\n
+			%c[0,100,255,150] • %c[ui_gray_2] usable as stash\n</text>
+	</string>
+
+	<string id="st_placeable_sumka6">
+		<text>Small Backpack</text>
+	</string>
+	<string id="st_placeable_sumka6_descr">
+		<text>Small cloth sheets sewn together to form a simple sack. While not particularly useful in permanent bases, this one finds its niche in creating a small stash when in a pinch.\n \n
+			%c[ui_gray_1]PROPERTIES:\n
+			%c[d_blue] • %c[ui_gray_2] item storage\n
+			%c[d_blue] • %c[ui_gray_2] placeable item\n
+			%c[d_blue] • %c[ui_gray_2] low capacity\n
+			%c[0,100,255,150] • %c[ui_gray_2] usable as stash\n</text>
+	</string>
+
+    <string id="st_place_furniture">
+		<text>Place Item</text>
+	</string>
+</string_table>

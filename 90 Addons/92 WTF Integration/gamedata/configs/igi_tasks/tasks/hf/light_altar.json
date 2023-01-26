@@ -1,0 +1,23 @@
+{
+	"preconditions": {
+	},
+	"disabled":false,
+	"setup": [
+
+	{
+	"entity_type":"item",
+	"target":"fetch",
+	"section":"af_electra_moonlight",
+	"where":"anywhere"
+	}
+	],
+	"rewards_completed": {
+		"money": 0,
+		"goodwill": {
+			"value": 50
+		},
+		"items": {
+			"device_light_altar": 1
+		}
+	}
+}

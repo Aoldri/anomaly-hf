@@ -1,0 +1,25 @@
+<w>
+	<file name="ui\ui_hf_radial_icons">
+        <!-- Use -->
+		<texture id="ui_hf_radial_icon_use_e" x="0" y="0" width="128" height="128" />
+        <texture id="ui_hf_radial_icon_use_h" x="0" y="0" width="128" height="128" /> <!-- not needed -->
+        <texture id="ui_hf_radial_icon_use_t" x="0" y="128" width="128" height="128" />
+        <texture id="ui_hf_radial_icon_use_d" x="0" y="256" width="128" height="128" />
+
+        <!-- Pickup -->
+        <texture id="ui_hf_radial_icon_pickup_e" x="128" y="0" width="128" height="128" />
+        <texture id="ui_hf_radial_icon_pickup_h" x="128" y="0" width="128" height="128" /> <!-- not needed -->
+        <texture id="ui_hf_radial_icon_pickup_t" x="128" y="128" width="128" height="128" />
+        <texture id="ui_hf_radial_icon_pickup_d" x="128" y="256" width="128" height="128" />
+
+        <!-- Freeze/Unfreeze -->
+        <texture id="ui_hf_radial_icon_frozen" x="0" y="384" width="128" height="128" />
+        <texture id="ui_hf_radial_icon_unfrozen" x="128" y="384" width="128" height="128" />
+
+        <!-- Upgrade -->
+        <texture id="ui_hf_radial_icon_upgrade" x="256" y="384" width="128" height="128" />
+
+        <!-- Connections -->
+        <texture id="ui_hf_radial_icon_connections" x="384" y="384" width="128" height="128" />
+	</file>
+</w>

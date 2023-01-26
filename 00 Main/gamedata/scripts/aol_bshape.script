@@ -1,0 +1,145 @@
+-- Generic Class for handling collisions with a bounding shape
+-- supposed to be subclassed into a useful shape (see aol_bbox)
+class "bshape_collider"
+
+function bshape_collider:__init(world_origin, local_origin, rotation)
+    -- Coordinates of the origin in local space (relative to self.vertices)
+    self.local_origin = local_origin or vector():set(0,0,0)
+
+    -- Coordinates of the entire box's origin in world space (relative to game map)
+    self.world_origin = world_origin or vector():set(0,0,0)
+
+    self.rotation = rotation
+    
+    self.is_colliding = false
+
+    -- Coordinates of bbox's vertices in local space
+    self.vertices = {}
+
+    -- Coordinates of bbox vertices in world space
+    self.world_vertices = {}
+
+    -- Pairs of vertices to perform raycasting between
+    self.ray_pairs = {}
+
+    -- Map of ray pair index to it's length
+    self.ray_pair_i2length = {}
+end
+
+function bshape_collider:UpdateBBox()
+    -- Get position of vertices in bounding box in world space
+    for i, local_vertex in ipairs(self.vertices) do
+        -- local space
+        local position = vector():set(local_vertex.x, local_vertex.y, local_vertex.z)
+
+        -- rotate with quaternion
+        if self.rotation then
+            position = self.rotation:rotate_vector(position)
+        end
+
+        -- world space
+        position = position:add(self.world_origin)
+
+        -- store vertices coordinates in world space of bbox
+        self.world_vertices[i] = position
+    end
+end
+
+function bshape_collider:UpdateLengths()
+    for i, ray_pair in ipairs(self.ray_pairs) do
+        local v1 = self.world_vertices[ray_pair[1]]
+        local v2 = self.world_vertices[ray_pair[2]]
+
+        local length = v1:distance_to(v2)
+        self.ray_pair_i2length[i] = length
+    end
+end
+
+function bshape_collider:CheckForCollisions()
+    -- Check for collisions by ray casting between vertex pairs
+    -- Pairs are specified in ray_pairs
+    -- Ray cast in both directions in case the ray goes into the world (rays only register collisions when hitting onto a normal plane)
+    local collision_found = false
+    for i, ray_pair in ipairs(self.ray_pairs) do
+        -- Exit early if there is no collision
+        if not collision_found then
+            local ray_length = self.ray_pair_i2length[i]
+            local ray = demonized_geometry_ray.geometry_ray({
+                ray_range=4,
+                contact_range=ray_length,
+                flags=(1+2+4+8)})
+            local ray_direction = vec_sub(self.world_vertices[ray_pair[1]], self.world_vertices[ray_pair[2]])
+            ray_direction = ray_direction:normalize()
+
+            -- Perform raycasts
+            local ray_result_rev = ray:get(vec_set(self.world_vertices[ray_pair[1]]), vec_set(ray_direction):invert())
+            local ray_result = ray:get(vec_set(self.world_vertices[ray_pair[2]]), vec_set(ray_direction))
+
+            if ray_result.in_contact or ray_result_rev.in_contact then
+                collision_found = true
+            end
+        end
+    end
+
+    self.is_colliding = collision_found
+
+    return collision_found
+end
+
+-- Setters
+
+function bshape_collider:SetLocalOrigin(new_pos)
+    self.local_origin = vec_set(new_pos)
+
+    -- update vertices of bbox in local space
+    self:UpdateVertices()
+
+    self:UpdateBBox()
+end
+
+function bshape_collider:SetWorldOrigin(new_pos)
+    self.world_origin = vec_set(new_pos)
+end
+
+-- Functions to be completed by subclasses
+
+function bshape_collider:UpdateVertices()
+end
+
+
+
+-- Class for rendering bounding boxes with particles
+class "bshape_renderer"
+
+function bshape_renderer:__init()
+    self.particles = {}
+end
+
+function bshape_renderer:DrawBShapeCollider(bshape_collider)
+    for i, position in ipairs(bshape_collider.world_vertices) do
+        if self.particles[i] == nil then
+            self.particles[i] = particles_object("_samples_particles_\\place_indicator")
+        end
+
+        local particle = self.particles[i]
+
+        if not particle:playing() then
+            particle:play()
+        end
+        -- Move particles to origin if bbox collides with something
+        if bshape_collider.is_colliding then
+            particle:move_to(bshape_collider.world_origin, VEC_Z)
+        -- Move particles to vertices of bbox if there is no collision
+        else
+            particle:move_to(position, VEC_Z)
+        end
+    end
+end
+
+function bshape_renderer:Stop()
+    for i, particle in ipairs(self.particles) do
+        if particle then
+            particle:stop_deffered()
+        end
+    end
+end

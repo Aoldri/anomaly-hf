@@ -1,0 +1,35 @@
+-- Allows for a constant location offset, lifting of the bottom plane
+-- to prevent collisions with a flat surface, and a central vertex on the bottom plane
+class "bbox_collider" (aol_bbox.bbox_collider)
+
+function bbox_collider:__init(width, length, height, world_origin, local_origin, rotation)
+    super(width, length, height, world_origin, local_origin, rotation)
+    self:UpdateLengths()
+end
+
+function bbox_collider:UpdateVertices()
+    aol_bbox.bbox_collider.UpdateVertices(self)
+    local y_offset = 0.05
+
+    for i=1,4 do
+        self.vertices[i].y = self.vertices[i].y +y_offset
+    end
+    local crosshair_point = vector():set(0, y_offset, 0)
+    self.vertices[#self.vertices + 1] = crosshair_point
+end
+
+---@param location vector
+function bbox_collider:SetCrosshairVertex(location)
+    self.vertices[#self.vertices] = vector():set(location)
+end
+
+---@return vector
+function bbox_collider:GetCrosshairVertex()
+    return vector():set(self.vertices[#self.vertices])
+end
+
+function bbox_collider:OffsetVertices(vector_offset)
+    for i, vertex_pos in ipairs(self.vertices) do
+        vertex_pos:add(vector_offset)
+    end
+end

@@ -1,0 +1,231 @@
+class "Quaternion"
+
+function Quaternion:__init(s, v)
+    if type(s) == "userdata" and
+       s.x and s.y and s.z then
+        -- XRay's order of rotations is ZXY
+        local unit_z = vector():set(0,0,1)
+        local q_z = get_rotation_around(unit_z, s.z)
+
+        -- X
+        local unit_x = vector():set(1,0,0)
+        local q_x = get_rotation_around(unit_x, s.x)
+
+        -- Y
+        local unit_y = vector():set(0,1,0)
+        local q_y = get_rotation_around(unit_y, s.y)
+
+        local q_rot = q_z:multiply(q_x):multiply(q_y)
+
+        self.w = q_rot.w
+        self.x = q_rot.x
+        self.y = q_rot.y
+        self.z = q_rot.z
+    else
+        self.w = s or 1
+        self.x = v and v.x or 0
+        self.y = v and v.y or 0
+        self.z = v and v.z or 0
+    end
+
+end
+
+function Quaternion:normalize()
+    local w2 = self.w*self.w
+    local x2 = self.x*self.x
+    local y2 = self.y*self.y
+    local z2 = self.z*self.z
+    local length = math.sqrt(w2+x2+y2+z2)
+    
+    self.w = self.w/length
+    self.x = self.x/length
+    self.y = self.y/length
+    self.z = self.z/length
+end
+
+-- Using Laurent Couvidou's optimal code:
+-- https://gamedev.stackexchange.com/questions/28395/rotating-vector3-by-a-quaternion
+function Quaternion:rotate_vector(v)
+    -- Z and Y are flipped because XRay flips them around, so this is set to the 
+    -- standard XYZ notation for calculation before being flipped back to XZY
+    local v = vector():set(v.x, v.z, v.y)
+    local u = vector():set(self.x, self.z, self.y)
+    local s = self.w
+
+    local v0 = vector():set(u):mul(vector():set(u):dotproduct(v)):mul(2.0)
+    local v1 = vector():set(v):mul((s*s) - vector():set(u):dotproduct(u))
+    local v2 = vector():set(0, 0, 0):crossproduct(u, v):mul(2*s)
+
+    local new_v = vector():set(v0):add(v1):add(v2)
+
+    return vector():set(new_v.x, new_v.z, new_v.y)
+end
+
+function Quaternion:multiply(q)
+    local q_v = vector():set(q.x, q.y, q.z)
+    local self_v = vector():set(self.x, self.y, self.z)
+
+    local w = (self.w*q.w) - (vector():set(self_v):dotproduct(vector():set(q_v)))
+
+    local v0 = vector():set(0, 0, 0):crossproduct(self_v, q_v)
+    local v1 = vector():set(q_v):mul(self.w)
+    local v2 = vector():set(self_v):mul(q.w)
+
+    local v = vector():set(v0):add(v1):add(v2)
+
+    return this.Quaternion(w, v)
+end
+
+-- Shamelessly taken from three.js
+function Quaternion:to_euler_angles()
+    local angles = vector():set(0, 0, 0)
+    local x = self.x
+    local y = self.y
+    local z = self.z
+    local w = self.w
+    local x2 = x + x
+    local y2 = y + y
+    local z2 = z + z
+    local xx = x * x2
+    local xy = x * y2
+    local xz = x * z2
+    local yy = y * y2
+    local yz = y * z2
+    local zz = z * z2
+    local wx = w * x2
+    local wy = w * y2
+    local wz = w * z2
+
+    local te = {}
+    te[0] = ( 1 - ( yy + zz ) )
+    te[1] = ( xy + wz )
+    te[2] = ( xz - wy )
+
+    te[4] = ( xy - wz )
+    te[5] = ( 1 - ( xx + zz ) )
+    te[6] = ( yz + wx )
+
+    te[8] = ( xz + wy )
+    te[9] = ( yz - wx )
+    te[10] = ( 1 - ( xx + yy ) )
+
+    local m11 = te[0]
+    local m12 = te[4]
+    local m13 = te[8];
+    local m21 = te[1]
+    local m22 = te[5]
+    local m23 = te[9];
+    local m31 = te[2]
+    local m32 = te[6]
+    local m33 = te[10];
+
+    -- ZXY
+    angles.x = math.asin( clamp( m32, - 1, 1 ) );
+
+    if ( math.abs( m32 ) < 0.9999999 ) then
+
+        angles.y = math.atan2( - m31, m33 );
+        angles.z = math.atan2( - m12, m22 );
+
+    else
+
+        angles.y = 0
+        angles.z = math.atan2( m21, m11 );
+
+    end
+
+    -- XZY
+    -- angles.z = math.asin( - clamp( m12, - 1, 1 ) );
+
+    -- if ( math.abs( m12 ) < 0.9999999 ) then
+
+    --     angles.x = math.atan2( m32, m22 );
+    --     angles.y = math.atan2( m13, m11 );
+
+    -- else
+
+    --     angles.x = math.atan2( -m23, m33 );
+    --     angles.y = 0
+
+    -- end
+
+    return angles
+end
+
+function Quaternion:to_string()
+    return("[w:" .. self.w .. ", x:" .. self.x .. ", y:" .. self.y .. ", z:" .. self.z .. "]")
+end
+
+----------
+
+
+function length_2(u)
+    local length = u:magnitude()
+    return length*length
+end
+
+function orthogonal(v)
+    local x = math.abs(v.x)
+    local y = math.abs(v.y)
+    local z = math.abs(v.z)
+
+    local other = nil
+    if x < y then
+        if x < z then
+            other = vector():set(1, 0, 0)
+        else
+            other = vector():set(0, 0, 1)
+        end
+    else
+        if y < z then
+            other = vector():set(0, 1, 0)
+        else
+            other = vector():set(0, 0, 1)
+        end
+    end
+    return vector():set(0, 0, 0):crossproduct(v, other);
+end
+
+function get_rotation_between(u, v)
+    local u = vector():set(u.x, u.z, u.y)
+    local v = vector():set(v.x, v.z, v.y)
+
+    local k_cos_theta = vector():set(u):dotproduct(v);
+    local k = math.sqrt(length_2(u) * length_2(v));
+
+    if (k_cos_theta / k == -1) then
+    -- if (k_cos_theta > 0.999999 or k_cos_theta < -0.999999) then
+        -- printf("ortho? " .. k_cos_theta)
+        -- 180 degree rotation around any orthogonal vector
+        local u_ortho = orthogonal(u):normalize()
+        return this.Quaternion(0, u_ortho);
+    end
+
+    local q = this.Quaternion(k_cos_theta + k, vector():set(0, 0, 0):crossproduct(u, v))
+    q:normalize()
+
+    local old_y = q.y
+    local old_z = q.z
+    q.y = old_z
+    q.z = old_y
+
+    return q
+end
+
+function get_rotation_around(v, angle)
+    local q = this.Quaternion()
+    q.w = math.cos(angle/2)
+    q.x = v.x * math.sin(angle/2)
+    q.y = v.y * math.sin(angle/2)
+    q.z = v.z * math.sin(angle/2)
+
+    q:normalize()
+
+    return q
+end
+
+function rotate_vector_by_euler(v_loc, v_rot)
+    local q_rot = Quaternion(v_rot)
+
+    return q_rot:rotate_vector(v_loc)
+end

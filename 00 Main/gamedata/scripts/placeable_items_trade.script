@@ -1,0 +1,47 @@
+local trade_table = {}
+local valid_items = {}
+local ini_trade = ini_file("items\\settings\\hideout_furniture\\trade\\factions.ltx")
+ini_trade:section_for_each(function(faction)
+    trade_table[faction] = {}
+
+    local supply_levels = {1, 2, 3}
+
+    for _, supply_level in ipairs(supply_levels) do
+        local trade_items = {}
+        
+        local items_str = ini_trade:r_string_ex(faction, tostring(supply_level))
+        local items = parse_key_value(items_str)
+        if items then
+            for item, amount in pairs(items) do                
+                local is_valid_item = valid_items[item] or ini_sys:section_exist(item)
+                valid_items[item] = is_valid_item
+                
+                if is_valid_item then
+                    trade_items[item] = amount
+                end
+            end
+        end
+        trade_table[faction][supply_level] = trade_items
+    end
+end)
+valid_items = nil
+
+function spawn_items(npc)
+    local is_supplier = trader_autoinject.get_trader_type(npc) == trader_autoinject.SUPPLIER
+    if is_supplier then
+        local community = npc:character_community() or "stalker"
+        local trader_table = trade_table[community] or trade_table["stalker"]
+        local supply_level = clamp(trader_autoinject.supply_level(npc, true) or 1, 1, 3)
+
+        if trader_table[supply_level] then
+            trader_autoinject.spawn_items(npc, trader_table[supply_level], true)
+        end
+    end
+end
+
+TraderAuto = trader_autoinject.update
+
+function trader_autoinject.update(npc)
+    TraderAuto(npc)
+    spawn_items(npc)
+end

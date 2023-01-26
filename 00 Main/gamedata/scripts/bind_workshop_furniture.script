@@ -1,0 +1,30 @@
+function init(obj)
+    obj:bind_object(hf_workshop_wrapper(obj).binder)
+end
+
+class "hf_workshop_wrapper" (bind_hf_base.hf_binder_wrapper)
+
+function hf_workshop_wrapper:__init(obj) super(obj)
+end
+
+function hf_workshop_wrapper:pickup()
+    local m_data = alife_storage_manager.get_state()
+    if m_data.workshop_stashes then
+		local id = m_data.workshop_stashes[self.object:id()]
+		if id then
+			local stash_obj = get_object_by_id(id)
+			
+			if stash_obj then
+				stash_obj:iterate_inventory_box( function(temp, obj)
+					stash_obj:transfer_item(obj, db.actor)
+				end, stash_obj)
+			end
+
+			m_data.workshop_stashes[self.object:id()] = nil
+
+			alife_release_id(id)
+		end
+	end
+
+    bind_hf_base.hf_binder_wrapper.pickup(self)
+end

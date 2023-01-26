@@ -1,0 +1,24 @@
+<string_table>
+    <string id="st_placeable_weapon_rack">
+        <text>Gun Display Rack</text>
+    </string>
+    <string id="st_placeable_weapon_rack_descr">
+		<text>An old gun rack that can be used to collect and display your favorite rifles and shotguns.\n \n
+			%c[ui_gray_1]PROPERTIES:\n
+			%c[d_blue] • %c[ui_gray_2] item storage\n
+			%c[d_blue] • %c[ui_gray_2] placeable item\n
+			%c[d_blue] • %c[ui_gray_2] slots for 6 weapons\n
+			%c[d_blue] • %c[ui_gray_2] only fits rifles, submachine-guns and shotguns\n</text>
+	</string>
+	
+	<string id="st_placeable_pistol_shelf">
+        <text>Pistol Display Shelf</text>
+    </string>
+    <string id="st_placeable_pistol_shelf_descr">
+		<text>An old shelf that can be used to show off your favorite handguns.\n \n
+			%c[ui_gray_1]PROPERTIES:\n
+			%c[d_blue] • %c[ui_gray_2] item storage\n
+			%c[d_blue] • %c[ui_gray_2] placeable item\n
+			%c[d_blue] • %c[ui_gray_2] only fits 4 pistols\n</text>
+	</string>
+</string_table>
