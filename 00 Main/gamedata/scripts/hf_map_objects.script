@@ -148,32 +148,8 @@ for _, section in pairs(ini_map_objects:get_sections()) do
     end
 end
 
--- function update_obj_binder(obj_id)
--- 	local obj = get_object_by_id(obj_id)
---     if not (obj) then
---         return
---     end
---     if not (obj.get_hanging_lamp) then
---         return
---     end
-
---     local binder = obj:binded_object()
---     if not binder then
---         return
---     end
-
---     binder.infinite_fuel = true
--- 	binder.is_world_obj = true
---     return true
--- end
-
 function actor_on_first_update()
-	if hf_obj_spawned then
-	-- 	for _, obj_id in pairs(world_obj_ids[level.name()]) do
-	-- 		CreateTimeEvent("HFWorldObjects","UpdateObj" .. obj_id, 0, update_obj_binder, obj_id)
-	-- 	end
-		return
-	end
+	if hf_obj_spawned then return end
 
 	-- Spawn world objects
 	for k, v in pairs(obj_tbl) do
@@ -192,14 +168,12 @@ function actor_on_first_update()
 end
 
 function save_state(m_data)
-	printf("save_state(m_data)")
     m_data.hf_obj_spawned = hf_obj_spawned
 	m_data.world_obj_ids = {}
 	copy_table(m_data.world_obj_ids, world_obj_ids)
 end
 
 function load_state(m_data)
-	printf("load_state(m_data)")
     hf_obj_spawned = m_data.hf_obj_spawned
 	world_obj_ids = m_data.world_obj_ids or world_obj_ids
 end
