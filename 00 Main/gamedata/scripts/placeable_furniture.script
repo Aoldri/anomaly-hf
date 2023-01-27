@@ -514,13 +514,14 @@ function UIAdvancedControls:__init() super()
 	self:InitCallBacks()
 
     self.states = {
-        IDLE = 1,
-        XZ_DRAG_LOC = 2,
-        Y_DRAG_LOC = 3,
-        Y_DRAG_ROT = 4,
+        IDLE = 1, -- idle
+        XZ_DRAG_LOC = 2, -- Horizontal Plane
+        Y_DRAG_LOC = 3, -- Up/Down
+        Y_DRAG_ROT = 4, -- Rotate about upward axis
     }
     self.state = self.states.IDLE
     self.snap = false
+    self.shift = false
     
     self.pos = {x=0, y=0}
     self.prev_pos = nil
@@ -549,7 +550,11 @@ function UIAdvancedControls:InitControls()
         -- XZ Displacement
         [DIK_keys.MOUSE_1] = {
             [ui_events.WINDOW_KEY_PRESSED] = function()
-                self.state = self.state == self.states.IDLE and self.states.XZ_DRAG_LOC or self.state
+                if self.shift then
+                    self.state = self.state == self.states.IDLE and self.states.Y_DRAG_LOC or self.state
+                else
+                    self.state = self.state == self.states.IDLE and self.states.XZ_DRAG_LOC or self.state
+                end
             end,
             [ui_events.WINDOW_KEY_RELEASED] = function()
                 self.prev_offset = vector():set(location_offset)
@@ -560,12 +565,10 @@ function UIAdvancedControls:InitControls()
         -- Y Displacement
         [DIK_keys.DIK_LSHIFT] = {
             [ui_events.WINDOW_KEY_PRESSED] = function()
-                self.state = self.state == self.states.IDLE and self.states.Y_DRAG_LOC or self.state
+                self.shift = true
             end,
             [ui_events.WINDOW_KEY_RELEASED] = function()
-                self.prev_offset = vector():set(location_offset)
-                self.state = self.states.IDLE
-                self.prev_pos = nil
+                self.shift = false
             end
         },
         -- Y Rotation
