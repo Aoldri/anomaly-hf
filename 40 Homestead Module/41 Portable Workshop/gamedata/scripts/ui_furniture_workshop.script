@@ -147,32 +147,9 @@ end
 
 function UIFurnitureWorkshop:Pickup()
 	local obj = get_object_by_id(self.obj_id)
-	if obj:binded_object().is_world_obj then
-		actor_menu.set_msg(1, game.translate_string("st_reject_pickup_world_obj"),3)
-		self:Close()
-		return
-	end
-	local item_section = ini_sys:r_string_ex(obj:section(), "item_section") or "device_gas_lamp"
-	alife_create_item(item_section, db.actor)
-
-	local m_data = alife_storage_manager.get_state()
-	if m_data.workshop_stashes then
-		local id = m_data.workshop_stashes[self.obj_id]
-		if id then
-			local stash_obj = get_object_by_id(id)
-			
-			if stash_obj then
-				stash_obj:iterate_inventory_box( function(temp, obj)
-					stash_obj:transfer_item(obj, db.actor)
-				end, stash_obj)
-			end
-	
-			alife_release_id(id)
-			m_data.workshop_stashes[self.obj_id] = nil
-		end
-	end
-
-	alife_release(obj)
+	---@type hf_binder_wrapper
+	local wrapper = obj:binded_object().wrapper
+	wrapper:pickup()
 	self:Close()
 end
 
