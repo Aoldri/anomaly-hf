@@ -1,0 +1,103 @@
+-- Get object sections
+local object_sections = ui_debug_main.get_spawn_table("Physic (Misc.)")
+print_table(object_sections)
+
+-- GUI Class
+class "UIHFSelectObj" (CUIScriptWnd)
+
+function UIHFSelectObj:__init() super()
+    self:InitControls()
+    self:InitCallbacks()
+end
+
+function UIHFSelectObj:InitControls()
+    self:SetWndRect(Frect():set(0, 0, 1024, 768))
+
+    local xml = CScriptXmlInit()
+	-- xml:ParseFile("ui_sleep_dialog.xml")
+    xml:ParseFile("ui_hf_creativemode_dialog.xml")
+
+    -- List of objects
+    self.obj_select = xml:InitComboBox("obj_select", self)
+	self:Register(self.obj_select, "obj_select")
+	for i=1,#object_sections do
+		self.obj_select:AddItem(object_sections[i], i)
+	end
+    
+    -- Spawn button
+    self.btn_spawn = xml:Init3tButton("btn_spawn", self)
+    self:Register(self.btn_spawn, "btn_spawn")
+end
+
+function UIHFSelectObj:OnKeyboard(dik, keyboard_action)
+	local res = CUIScriptWnd.OnKeyboard(self,dik,keyboard_action)
+	if (res == false) then
+		local bind = dik_to_bind(dik)
+		if keyboard_action == ui_events.WINDOW_KEY_PRESSED then
+			if dik == DIK_keys.DIK_ESCAPE then
+				self:Close()
+            elseif dik == DIK_keys.DIK_RETURN then
+                self:Accept()
+			end
+		end
+	end
+	return res
+end
+
+function UIHFSelectObj:InitCallbacks()
+    self:AddCallback("btn_spawn", ui_events.BUTTON_CLICKED, self.Accept, self)
+end
+
+function UIHFSelectObj:Update()
+	CUIScriptWnd.Update(self)
+end
+
+function UIHFSelectObj:Accept()
+    local i = self.obj_select:CurrentID()
+    local section = object_sections[i]
+    if not section then return end
+
+    placeable_furniture.start_placing_item(section)
+    self:Close()
+end
+
+function UIHFSelectObj:Close()
+    self:HideDialog()
+	Unregister_UI("UIHFSelectObj")
+end
+
+-- GUI
+---@type UIHFSelectObj
+GUISelect = nil
+function open_select_menu()
+    if not DEV_DEBUG then return end
+    
+    hide_hud_inventory()
+    
+    if (not GUISelect) then
+        GUISelect = UIHFSelectObj()
+    end
+    if (GUISelect) and (not GUISelect:IsShown()) then
+        GUISelect:ShowDialog(true)
+
+        Register_UI("UIHFSelectObj","creative_mode")
+    end
+end
+
+-- 
+local bind_open_menu = DIK_keys.DIK_SEMICOLON
+function on_key_press(dik)
+    if dik ~= bind_open_menu then return end
+    open_select_menu()
+end
+
+function on_option_change(mcm)
+    if not mcm then return end
+    bind_open_menu = ui_mcm.get("aol_hf/bind_creative_mode") or bind_open_menu
+end
+
+function on_game_start()
+    RegisterScriptCallback("on_option_change",on_option_change)
+    on_option_change(ui_mcm and ui_mcm.key_hold)
+    RegisterScriptCallback("on_key_press", on_key_press)
+end

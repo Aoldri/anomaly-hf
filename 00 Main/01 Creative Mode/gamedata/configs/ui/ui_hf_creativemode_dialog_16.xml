@@ -1,0 +1,17 @@
+<w>
+    <main x="0" y="0" width="1024" height="768"/>
+
+    <obj_select x="400" y="384" width="202" height="24" can_select="1" list_length="12">
+		<list_font r="170" g="170" b="170" font="letterica16"/>
+        <text_color>
+            <e r="170" g="170" b="170"/>
+            <d r="70" g="70" b="70"/>
+        </text_color>
+    </obj_select>
+
+    <btn_spawn x="512" y="354" width="101" height="28" check_mode="0" stretch="1">
+        <window_name>button_spawn</window_name>
+        <text font="letterica18">st_ui_dbg_spawn_btn</text>
+        <texture>ui_button_ordinary</texture>
+    </btn_spawn>
+</w>

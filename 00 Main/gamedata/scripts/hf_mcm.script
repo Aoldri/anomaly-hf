@@ -15,6 +15,7 @@ function on_mcm_load()
             {id = "use_ingame_time", type = "check", val = 1, def=false},
             {id = "record_obj", type = "check", val = 1, def=false},
             {id = "location_offset", type = "input", val = 0, def="0,0,0"},
+            {id = "bind_creative_mode", type = "key_bind", val = 2, def=DIK_keys.DIK_SEMICOLON},
         }
     }
     return options
