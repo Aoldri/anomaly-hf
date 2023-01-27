@@ -739,8 +739,7 @@ function create_interact_gui()
     end) -- stateful colour
 
     -- Text
-    opt_pickup:SetText({title = "Pick Up",
-                     description = "Does nothing :)"})
+    opt_pickup:SetText({title = "Pick Up"})
     
     -- Open UI
     ---@class OptionData
@@ -752,8 +751,7 @@ function create_interact_gui()
     end) -- stateful colour
 
     -- Text
-    opt_ui:SetText({title = "Open Advanced UI",
-                     description = "Does nothing :)"})
+    opt_ui:SetText({title = "Open Advanced UI"})
     
     -- Freeze/Unfreeze
     ---@class OptionData
@@ -769,8 +767,7 @@ function create_interact_gui()
     end) -- stateful colour
 
     -- Text
-    opt_freeze:SetText({title = "Toggle Freeze",
-                     description = "Does nothing :)"})
+    opt_freeze:SetText({title = "Toggle Freeze"})
     
     -- Upgrade
     ---@class OptionData
@@ -781,7 +778,7 @@ function create_interact_gui()
 
     -- Text
     opt_upgrade:SetText({title = "Upgrade",
-                     description = "Does nothing :)"})
+                     description = "To be Implemented"})
     opt_upgrade:SetState(arm.States.DISABLED)
     
     -- Wire Connections
@@ -792,7 +789,7 @@ function create_interact_gui()
     end)
     -- Text
     opt_connections:SetText({title = "Manage Connections",
-                     description = "Does nothing :)"})
+                     description = "To be Implemented"})
     opt_connections:SetState(arm.States.DISABLED)
 
     RadialGUI:RegisterCallback("opt_pickup", function ()
