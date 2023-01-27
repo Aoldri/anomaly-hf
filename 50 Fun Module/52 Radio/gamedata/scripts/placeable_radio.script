@@ -590,7 +590,6 @@ function UIFurnitureRadio:On_Radio_Volume_Down()
 end	
 
 function UIFurnitureRadio:On_Radio_Volume_Up()
-	printf("self.obj_id: " .. self.obj_id)
 	local wrapper = bind_hf_base.get_wrapper(self.obj_id)
 	wrapper:action_radio_v_up()
 	self.snd_click:play(db.actor, 0, sound_object.s2d)

@@ -64,7 +64,6 @@ local bbox_drawer = aol_bshape.bshape_renderer()
 function reset_offsets()
     location_offset = utils_data.string_to_vector(ui_mcm.get("aol_hf/location_offset"))
     rotation_offset = 0
-    printf("resetting offsets: %s", vec_to_str(location_offset))
 end
 
 transition_functors = {
@@ -396,7 +395,6 @@ end
 local function on_before_key_press(key, bind, dis, flags)
     if bind == key_bindings.kQUIT and
       (is_state(states.HOLDING) or is_state(states.PREVIEW)) then
-        printf("QUITTING")
         flags.ret_value = false
         set_state(states.IDLE)
         bbox_drawer:Stop()

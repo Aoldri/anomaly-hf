@@ -21,7 +21,6 @@ function GetStash(id)
 	local stash_id = nil
 
 	if not se_inv_box then
-		printf("creating stash")
 		se_inv_box = CreateStash(id)
 	end
 
@@ -61,8 +60,6 @@ local function UseStash(id)
 end 
 
 function GiveStashItemsToActor(workshop_id, stash_id)
-	printf("GiveStashItemsToActor(workshop_id, stash_id)")
-	-- printf(id)
 	local items = {}
 
 	if stash_id then
@@ -74,7 +71,6 @@ function GiveStashItemsToActor(workshop_id, stash_id)
 		end, stash_obj)
 	end
 
-	printf("workshop, item_ids: " .. #items)
 	zzz_workshop_return_items.item_ids = items
 	zzz_workshop_return_items.stash_id = stash_id
 	return true
@@ -97,7 +93,7 @@ class "UIFurnitureWorkshop" (CUIScriptWnd)
 
 function UIFurnitureWorkshop:__init() super()
 	self:InitControls()
-	-- self:InitCallbacks()
+	self:InitCallbacks()
 end
 
 function UIFurnitureWorkshop:__finalize()
@@ -140,7 +136,6 @@ end
 
 function UIFurnitureWorkshop:AccessStash()
 	local stash_id = GetStash(self.obj_id)
-	printf("stash_id: " .. stash_id)
 	CreateTimeEvent("hf_workshop","open_stash_"..stash_id,0,UseStash,stash_id)
 	self:Close()
 end
@@ -160,14 +155,8 @@ function UIFurnitureWorkshop:InitCallbacks()
 	self:AddCallback("btn_close", ui_events.BUTTON_CLICKED, self.Close, self)
 end
 
-function UIFurnitureWorkshop:Initialize()
-	self:InitCallbacks()
-end
-
 function UIFurnitureWorkshop:TestAndShow(obj_id)
     self.obj_id = obj_id
-	printf("self.obj_id: " .. self.obj_id)
-	self:Initialize()
 	self:ShowDialog(true)
 	Register_UI("UIFurnitureWorkshop","ui_hf_workshop")
 end

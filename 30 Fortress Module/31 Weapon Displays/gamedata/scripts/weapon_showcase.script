@@ -49,13 +49,9 @@ end)
 
 ---@param se_obj game_object
 function server_entity_on_switch_online(se_obj)
-    printf("switch online: %s (%s)", se_obj:section(), se_obj:id())
     for case_id, case_guns in pairs(weapon_displays) do
-        printf("case_id: " .. case_id)
         for item_id, world_id in pairs(case_guns) do
-            printf("checking against: %s (%s)", world_id, item_id)
             if se_obj:id() == world_id then
-                printf("START FREEZE")
                 CreateTimeEvent("collector","freeze_" .. se_obj:id(), 0, freeze_item, se_obj:id(), item_id)
                 return
             end
