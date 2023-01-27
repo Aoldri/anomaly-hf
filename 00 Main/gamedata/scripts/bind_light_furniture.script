@@ -69,13 +69,6 @@ function placeable_light_wrapper:__init(obj) super(obj)
 	self.particle_path = ini_sys:r_string_ex(section,"particle")
 	self.hide_bone_off = ini_sys:r_string_ex(section,"hide_bone_off")
 	
-	if self.humming_snd_path then
-		self.humming = sound_object(self.humming_snd_path)
-		self.humming:play_at_pos(self.object, self.object:position(), 0, sound_object.s3d + sound_object.looped)
-		self.humming.volume = 0.0
-		self.humming_max = time_global() + 5000
-	end
-	
 	if self.particle_path then
 		self.particles = particles_object(self.particle_path)
 	end
