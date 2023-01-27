@@ -52,21 +52,11 @@ function UIFurnitureLight:ToggleLight()
 end
 
 function UIFurnitureLight:Pickup()
-	local data = hf_obj_manager.get_data(self.light_id)
 	local obj = get_object_by_id(self.light_id)
-	if data.is_world_obj then
-		actor_menu.set_msg(1, game.translate_string("st_reject_pickup_world_obj"),3)
-		self:Close()
-		return
-	end
-	local item_section = ini_sys:r_string_ex(self.section, "item_section") or "device_gas_lamp"
-	local condition = data.fuel
-	-- printf("PICKED UP ITEM, CONDITION: " .. condition)
-	alife_create_item(item_section, db.actor, {cond=condition})
-	-- local item = alife():create(item_section, db.actor:position(), 1, db.actor:game_vertex_id(), db.actor:id())
-	-- get_object_by_id(item.id):set_condition(obj:binded_object().fuel)
+	---@type hf_binder_wrapper
+	local wrapper = obj:binded_object().wrapper
 
-	alife_release(obj)
+	wrapper:Pickup()
 	self:Close()
 end
 
@@ -75,7 +65,7 @@ function UIFurnitureLight:Refuel()
 	if db.actor:object(fuel_type) then
 		itms_manager.relocate_item_from_actor(db.actor, nil, fuel_type, 1)
 		local obj = get_object_by_id(self.light_id)
-		obj:binded_object().fuel = 1.0
+		obj:binded_object().wrapper.fuel = 1.0
 	else
 		actor_menu.set_msg(1, "I don't have any fuel for this.",3)
 	end
