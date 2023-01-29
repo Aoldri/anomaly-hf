@@ -178,6 +178,20 @@ function load_state(m_data)
 	world_obj_ids = m_data.world_obj_ids or world_obj_ids
 end
 
+function on_key_press(dik)
+	if dik ~= DIK_keys.DIK_T then return end
+
+	---@type game_object
+	local obj = placeable_furniture.get_obj_at_crosshair()
+	if not obj then return end
+
+	local bone_name = obj:bone_name(0)
+	local angle_hpb = obj:bone_direction(bone_name)
+	local true_angle = vector():set(angle_hpb.y, angle_hpb.x, angle_hpb.z)
+
+	add_obj_prompt(obj:section(), obj:position(), obj:level_vertex_id(), obj:game_vertex_id(), true_angle)
+end
+
 function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_option_change callback
 	if mcm then
 		record_obj = ui_mcm.get("aol_hf/record_obj")
@@ -188,6 +202,7 @@ function on_game_start()
 	RegisterScriptCallback("on_option_change",on_option_change)
     on_option_change(mcm_keybinds)
 
+	RegisterScriptCallback("on_key_press", on_key_press)
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
 	RegisterScriptCallback("save_state",save_state)
 	RegisterScriptCallback("load_state",load_state)
