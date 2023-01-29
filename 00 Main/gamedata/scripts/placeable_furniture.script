@@ -739,7 +739,7 @@ function create_interact_gui()
     end) -- stateful colour
 
     -- Text
-    opt_pickup:SetText({title = "Pick Up"})
+    opt_pickup:SetText({title = gc("st_pickup")})
     
     -- Open UI
     ---@class OptionData
@@ -751,7 +751,7 @@ function create_interact_gui()
     end) -- stateful colour
 
     -- Text
-    opt_ui:SetText({title = "Open Advanced UI"})
+    opt_ui:SetText({title = gc("st_open_adv_ui")})
     
     -- Freeze/Unfreeze
     ---@class OptionData
@@ -767,7 +767,7 @@ function create_interact_gui()
     end) -- stateful colour
 
     -- Text
-    opt_freeze:SetText({title = "Toggle Freeze"})
+    opt_freeze:SetText({title = gc("st_freeze")})
     
     -- Upgrade
     ---@class OptionData
@@ -777,8 +777,8 @@ function create_interact_gui()
     end) -- stateful colour
 
     -- Text
-    opt_upgrade:SetText({title = "Upgrade",
-                     description = "To be Implemented"})
+    opt_upgrade:SetText({title = gc("st_cap_upgrades"),
+                     description = gc("st_not_implemented")})
     opt_upgrade:SetState(arm.States.DISABLED)
     
     -- Wire Connections
@@ -788,8 +788,8 @@ function create_interact_gui()
         return arm.get_stateful_colour(state) -- stateful colour
     end)
     -- Text
-    opt_connections:SetText({title = "Manage Connections",
-                     description = "To be Implemented"})
+    opt_connections:SetText({title = gc("st_open_connections"),
+                     description = gc("st_not_implemented")})
     opt_connections:SetState(arm.States.DISABLED)
 
     RadialGUI:RegisterCallback("opt_pickup", function ()
@@ -809,8 +809,10 @@ function create_interact_gui()
         wrapper:set_frozen(not wrapper.is_frozen)
         if wrapper.is_frozen then
             opt_freeze:SetState(arm.States.HIGHLIGHTED)
+            opt_freeze:SetText({title = gc("st_unfreeze")})
         else
             opt_freeze:SetState(arm.States.ENABLED)
+            opt_freeze:SetText({title = gc("st_freeze")})
         end
     end)
 
@@ -843,8 +845,10 @@ function update_radial_gui(wrapper)
 
     if wrapper.is_frozen then
         RadialGUI:GetOption("opt_freeze"):SetState(arm.States.HIGHLIGHTED)
+        RadialGUI:GetOption("opt_freeze"):SetText({title = gc("st_unfreeze")})
     else
         RadialGUI:GetOption("opt_freeze"):SetState(arm.States.ENABLED)
+        RadialGUI:GetOption("opt_freeze"):SetText({title = gc("st_freeze")})
     end
 end
 

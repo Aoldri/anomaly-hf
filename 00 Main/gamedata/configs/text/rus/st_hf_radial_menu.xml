@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+    <string id="st_open_adv_ui">
+		<text>Открыть расширенный пользовательский интерфейс</text>
+	</string>
+    <string id="st_freeze">
+		<text>Заморозить</text>
+	</string>
+    <string id="st_unfreeze">
+		<text>Разморозить</text>
+	</string>
+    <string id="st_open_connections">
+		<text>Управление соединениями</text>
+	</string>
+
+    <string id="st_not_implemented">
+		<text>Будет реализовано</text>
+	</string>
+</string_table>
