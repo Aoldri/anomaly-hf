@@ -12,12 +12,24 @@
 		<text>Switch between alignment modes: Player and Surface</text>
 	</string>
 
+	<string id="ui_mcm_aol_hf_bind_place_mode">
+		<text>Switch between placement modes: Normal, Advanced, and Preview</text>
+	</string>
+
 	<string id="ui_mcm_aol_hf_use_ingame_time">
 		<text>Lights Show In-game Time</text>
 	</string>
 
-	<string id="ui_mcm_aol_hf_record_obj">
+	<string id="ui_mcm_aol_hf_flag_record_on_place">
 		<text>Record Placed Objects in LTX</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_flag_record_on_keypress">
+		<text>Enable recording objects via key press</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_bind_record">
+		<text>Record Object</text>
 	</string>
 
 	<string id="ui_mcm_aol_hf_update_mcm">

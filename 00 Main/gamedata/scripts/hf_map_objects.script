@@ -1,10 +1,12 @@
 local mcm_keybinds = ui_mcm and ui_mcm.key_hold
-local record_obj = false
+local record_on_place = false
+local record_on_keypress = false
+local bind_record = DIK_keys.DIK_APOSTROPHE
 
 ---@class UIRecordObj
 GUI = nil -- instance, don't touch
 function add_obj_prompt(section, position, level_vertex_id, game_vertex_id, rotation)
-	if not DEV_DEBUG and not record_obj then
+	if not DEV_DEBUG then
 		return
 	end
 
@@ -18,7 +20,7 @@ function add_obj_prompt(section, position, level_vertex_id, game_vertex_id, rota
 		GUI:ShowDialog(true)
 		GUI:Reset(section, position, level_vertex_id, game_vertex_id, rotation)
 
-		Register_UI("UIRecordObj","hf_record_obj")
+		Register_UI("UIRecordObj","hf_record_on_place")
 	end
 end
 
@@ -179,7 +181,7 @@ function load_state(m_data)
 end
 
 function on_key_press(dik)
-	if dik ~= DIK_keys.DIK_T then return end
+	if dik ~= bind_record or not record_on_keypress then return end
 
 	---@type game_object
 	local obj = placeable_furniture.get_obj_at_crosshair()
@@ -194,8 +196,20 @@ end
 
 function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_option_change callback
 	if mcm then
-		record_obj = ui_mcm.get("aol_hf/record_obj")
+		record_on_place = ui_mcm.get("aol_hf/flag_record_on_place")
+		record_on_keypress = ui_mcm.get("aol_hf/flag_record_on_keypress")
+
+		bind_record = ui_mcm.get("aol_hf/bind_record") or bind_record
 	end
+end
+
+function hf_on_furniture_place(id)
+	if not record_on_place then return end
+	
+	local obj = alife_object(id)
+	if not obj then return end
+	
+	add_obj_prompt(obj:section_name(), obj.position, obj.m_level_vertex_id, obj.m_game_vertex_id, obj.angle)
 end
 
 function on_game_start()
@@ -206,4 +220,5 @@ function on_game_start()
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
 	RegisterScriptCallback("save_state",save_state)
 	RegisterScriptCallback("load_state",load_state)
+	RegisterScriptCallback("hf_on_furniture_place", hf_on_furniture_place)
 end

@@ -334,8 +334,7 @@ local function on_key_press(dik)
             local obj_id = create_object(phy_obj_section, place_coordinates, bbox.rotation)
             if obj_id then transfer_item_data(item_id, obj_id) end
 
-            -- Record in debug mode
-            hf_map_objects.add_obj_prompt(phy_obj_section, place_coordinates, db.actor:level_vertex_id(), db.actor:game_vertex_id(), vector():set(bbox.rotation:to_euler_angles()))
+            SendScriptCallback("hf_on_furniture_place", obj_id)
 
             place_sound:play_no_feedback(db.actor, sound_object.s3d, 0, place_coordinates, 1.0, 1.0)
             bbox_drawer:Stop()

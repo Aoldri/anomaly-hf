@@ -13,9 +13,14 @@ function on_mcm_load()
             {id = "bind_place_mode", type = "key_bind", val = 2, def=DIK_keys.DIK_HOME},
 
             {id = "use_ingame_time", type = "check", val = 1, def=false},
-            {id = "record_obj", type = "check", val = 1, def=false},
-            {id = "location_offset", type = "input", val = 0, def="0,0,0"},
+
             {id = "bind_creative_mode", type = "key_bind", val = 2, def=DIK_keys.DIK_SEMICOLON},
+
+            {id = "location_offset", type = "input", val = 0, def="0,0,0"},
+
+            {id = "flag_record_on_place", type = "check", val = 1, def=false},
+            {id = "flag_record_on_keypress", type = "check", val = 1, def=false},
+            {id = "bind_record", type = "key_bind", val = 2, def=DIK_keys.DIK_APOSTROPHE},
         }
     }
     return options

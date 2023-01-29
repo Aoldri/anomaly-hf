@@ -1,0 +1,4 @@
+function on_game_start()
+	-- Custom Callbacks
+    AddScriptCallback("hf_on_furniture_place") -- Params: (number: id of object)
+end
