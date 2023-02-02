@@ -4,31 +4,46 @@
         <text>Hideout Furniture</text>
     </string>
 
-	<string id="ui_mcm_aol_hf_bind_collision">
+	<!-- Controls -->
+	<string id="ui_mcm_menu_aol_hf_controls_title">
+		<text>Controls</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_controls_bind_collision">
 		<text>Toggle Collision Checking</text>
 	</string>
 
-	<string id="ui_mcm_aol_hf_bind_alignment">
+	<string id="ui_mcm_aol_hf_controls_bind_alignment">
 		<text>Switch between alignment modes: Player and Surface</text>
 	</string>
 
-	<string id="ui_mcm_aol_hf_bind_place_mode">
+	<string id="ui_mcm_aol_hf_controls_bind_place_mode">
 		<text>Switch between placement modes: Normal, Advanced, and Preview</text>
 	</string>
 
-	<string id="ui_mcm_aol_hf_use_ingame_time">
+	<!-- Gameplay -->
+	<string id="ui_mcm_menu_aol_hf_gameplay_title">
+		<text>Gameplay</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_gameplay_use_ingame_time">
 		<text>Lights Show In-game Time</text>
 	</string>
 
-	<string id="ui_mcm_aol_hf_flag_record_on_place">
+	<!-- World Objects -->
+	<string id="ui_mcm_menu_aol_hf_world_objects_title">
+		<text>World Objects</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_world_obj_flag_record_on_place">
 		<text>Record Placed Objects in LTX</text>
 	</string>
 
-	<string id="ui_mcm_aol_hf_flag_record_on_keypress">
+	<string id="ui_mcm_aol_hf_world_obj_flag_record_on_keypress">
 		<text>Enable recording objects via key press</text>
 	</string>
 
-	<string id="ui_mcm_aol_hf_bind_record">
+	<string id="ui_mcm_aol_hf_world_obj_bind_record">
 		<text>Record Object</text>
 	</string>
 
