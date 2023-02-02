@@ -184,12 +184,7 @@ end
 -------
 function on_option_change(mcm)
 	if mcm then
-		use_ingame_time = ui_mcm.get("aol_hf/use_ingame_time")
-		if use_ingame_time then
-			-- printf("use_ingame_time: TRUE")
-		else
-			-- printf("use_ingame_time: FALSE")
-		end
+		use_ingame_time = ui_mcm.get("aol_hf/gameplay/use_ingame_time")
 	end
 end
 

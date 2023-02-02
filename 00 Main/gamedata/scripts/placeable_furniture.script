@@ -62,7 +62,7 @@ local bbox_drawer = aol_bshape.bshape_renderer()
 -- State Management
 ---------------------
 function reset_offsets()
-    location_offset = utils_data.string_to_vector(ui_mcm.get("aol_hf/location_offset"))
+    location_offset = utils_data.string_to_vector(ui_mcm.get("aol_hf/debug/location_offset"))
     rotation_offset = 0
 end
 
@@ -871,9 +871,9 @@ end
 
 function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_option_change callback
 	if mcm then
-        key_toggle_collision = ui_mcm.get("aol_hf/bind_collision") or key_toggle_collision
-        key_toggle_align = ui_mcm.get("aol_hf/bind_alignment") or key_toggle_align
-        key_toggle_controls = ui_mcm.get("aol_hf/bind_place_mode") or key_toggle_controls
+        key_toggle_collision = ui_mcm.get("aol_hf/controls/bind_collision") or key_toggle_collision
+        key_toggle_align = ui_mcm.get("aol_hf/controls/bind_alignment") or key_toggle_align
+        key_toggle_controls = ui_mcm.get("aol_hf/controls/bind_place_mode") or key_toggle_controls
 	end
     key_place = bind_to_dik(key_bindings.kUSE)
 end

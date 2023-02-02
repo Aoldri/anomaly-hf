@@ -196,10 +196,10 @@ end
 
 function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_option_change callback
 	if mcm then
-		record_on_place = ui_mcm.get("aol_hf/flag_record_on_place")
-		record_on_keypress = ui_mcm.get("aol_hf/flag_record_on_keypress")
+		record_on_place = ui_mcm.get("aol_hf/world_obj/flag_record_on_place")
+		record_on_keypress = ui_mcm.get("aol_hf/world_obj/flag_record_on_keypress")
 
-		bind_record = ui_mcm.get("aol_hf/bind_record") or bind_record
+		bind_record = ui_mcm.get("aol_hf/world_obj/bind_record") or bind_record
 	end
 end
 
