@@ -5,7 +5,7 @@
     </string>
 
 	<!-- Controls -->
-	<string id="ui_mcm_menu_aol_hf_controls_title">
+	<string id="ui_mcm_menu_controls">
 		<text>Controls</text>
 	</string>
 
@@ -22,7 +22,7 @@
 	</string>
 
 	<!-- Gameplay -->
-	<string id="ui_mcm_menu_aol_hf_gameplay_title">
+	<string id="ui_mcm_menu_gameplay">
 		<text>Gameplay</text>
 	</string>
 
@@ -31,20 +31,33 @@
 	</string>
 
 	<!-- World Objects -->
-	<string id="ui_mcm_menu_aol_hf_world_objects_title">
+	<string id="ui_mcm_menu_world_obj">
 		<text>World Objects</text>
 	</string>
 
 	<string id="ui_mcm_aol_hf_world_obj_flag_record_on_place">
-		<text>Record Placed Objects in LTX</text>
+		<text>Enable Recording Objects on Placement</text>
 	</string>
 
 	<string id="ui_mcm_aol_hf_world_obj_flag_record_on_keypress">
-		<text>Enable recording objects via key press</text>
+		<text>Enable Recording Objects via Key Press</text>
 	</string>
 
 	<string id="ui_mcm_aol_hf_world_obj_bind_record">
 		<text>Record Object</text>
+	</string>
+
+	<!-- Debug -->
+	<string id="ui_mcm_menu_debug">
+		<text>Debug</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_debug_bind_creative_mode">
+		<text>Creative Mode</text>
+	</string>
+
+	<string id="ui_mcm_aol_hf_debug_location_offset">
+		<text>Location Offset</text>
 	</string>
 
 	<string id="ui_mcm_aol_hf_update_mcm">

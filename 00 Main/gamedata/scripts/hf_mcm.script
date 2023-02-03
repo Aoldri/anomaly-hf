@@ -8,7 +8,7 @@ function on_mcm_load()
                 id = "controls",
                 sh = true,
                 gr = {
-                    {id = "ctrl_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_aol_hf_controls_title", size = {512, 50}, spacing = 20},
+                    {id = "ctrl_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_controls", size = {512, 50}, spacing = 20},
 
                     {id = "bind_collision", type = "key_bind", val = 2, def=DIK_keys.DIK_TAB},
                     {id = "bind_alignment", type = "key_bind", val = 2, def=DIK_keys.DIK_CAPITAL},
@@ -19,7 +19,7 @@ function on_mcm_load()
                 id = "gameplay",
                 sh = true,
                 gr = {
-                    {id = "game_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_aol_hf_gameplay_title", size = {512, 50}, spacing = 20},
+                    {id = "game_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_gameplay", size = {512, 50}, spacing = 20},
 
                     {id = "use_ingame_time", type = "check", val = 1, def=false},
                 }
@@ -28,7 +28,7 @@ function on_mcm_load()
                 id = "world_obj",
                 sh = true,
                 gr = {
-                    {id = "world_obj_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_aol_hf_world_obj_title", size = {512, 50}, spacing = 20},
+                    {id = "world_obj_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_world_obj", size = {512, 50}, spacing = 20},
 
                     {id = "flag_record_on_place", type = "check", val = 1, def=false},
                     {id = "flag_record_on_keypress", type = "check", val = 1, def=false},
@@ -39,7 +39,7 @@ function on_mcm_load()
                 id = "debug",
                 sh = true,
                 gr = {
-                    {id = "debug_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_aol_hf_debug_title", size = {512, 50}, spacing = 20},
+                    {id = "debug_title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_debug", size = {512, 50}, spacing = 20},
                     
                     {id = "bind_creative_mode", type = "key_bind", val = 2, def=DIK_keys.DIK_SEMICOLON},
                     {id = "location_offset", type = "input", val = 0, def="0,0,0"},
