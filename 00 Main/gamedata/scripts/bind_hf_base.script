@@ -8,6 +8,21 @@ function get_wrapper(id)
     return obj:binded_object().wrapper
 end
 
+function freeze_obj(id)
+    local obj = level.object_by_id(id)
+    if not obj then return end
+
+    local phys = obj:get_physics_shell()
+    if not phys then return end
+
+    phys:freeze()
+
+    local wrapper = get_wrapper(id)
+    if wrapper then wrapper.is_frozen = true end
+
+    return true
+end
+
 function init(obj)
     obj:bind_object(hf_binder_wrapper(obj).binder)
 end
@@ -47,22 +62,16 @@ function hf_binder_wrapper:__init(obj)
 end
 
 function hf_binder_wrapper:update(delta)
-    if not self.init then
-		local phys = self.object:get_physics_shell()
-		if phys then
-			phys:apply_force(0, 1, 0)
-            phys:freeze()
-            self.is_frozen = true
-
-			self.init = true
-		end
-	end
 end
 
 function hf_binder_wrapper:net_spawn()
+    CreateTimeEvent("hf_freeze", self.object:id(), 0, freeze_obj, self.object:id())
 end
 
 function hf_binder_wrapper:net_destroy()
+    -- Remove time event just in case object is released before freezing
+	RemoveTimeEvent("hf_freeze", self.object:id())
+
     -- Clean up references
     self.binder.wrapper = nil
     self.binder = nil
