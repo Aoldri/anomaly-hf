@@ -1,0 +1,63 @@
+function freeze_obj(id)
+    local obj = level.object_by_id(id)
+    if not obj then return end
+
+    local phys = obj:get_physics_shell()
+    if not phys then return end
+
+    phys:freeze()
+    return true
+end
+
+function init(obj)
+    obj:bind_object(hf_static_binder(obj))
+end
+--------------------------------------------------------------------------------
+-- Class "hf_static_binder"
+--------------------------------------------------------------------------------
+class "hf_static_binder" (object_binder)
+-- Class constructor
+function hf_static_binder:__init(obj) super(obj)
+end
+-- Class update
+function hf_static_binder:update(delta)
+    object_binder.update(self, delta)
+end
+
+-- Reload object
+function hf_static_binder:reload(section)
+    object_binder.reload(self, section)
+end
+-- Reinitialize object
+function hf_static_binder:reinit()
+    object_binder.reinit(self)
+end
+-- Net spawn
+function hf_static_binder:net_spawn(se_abstract)
+    if not(object_binder.net_spawn(self, se_abstract)) then
+        return false
+    end
+
+	CreateTimeEvent("hf_freeze", self.object:id(), 0, freeze_obj, self.object:id())
+
+    return true
+end
+-- Net destroy
+function hf_static_binder:net_destroy()
+	object_binder.net_destroy(self)
+
+	-- Remove time event just in case object is released before freezing
+	RemoveTimeEvent("hf_freeze", self.object:id())
+end
+-- Standart function for save
+function hf_static_binder:net_save_relevant()
+	return true
+end
+-- Saving container
+function hf_static_binder:save(stpk)
+	object_binder.save(self, stpk)
+end
+-- Loading container
+function hf_static_binder:load(stpk)
+	object_binder.load(self, stpk)
+end
