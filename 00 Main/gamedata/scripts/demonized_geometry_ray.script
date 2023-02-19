@@ -274,6 +274,8 @@ function get_surface_normal(pos, dir)
     local ray = geometry_ray({
         ray_range = 1000,
         visualize = false,
+        flags = 1+2,
+        ignore_object = db.actor,
     })
 
     -- Get player's camera position and direction in world space

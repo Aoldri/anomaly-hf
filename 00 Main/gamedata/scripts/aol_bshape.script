@@ -67,7 +67,7 @@ function bshape_collider:CheckForCollisions()
             local ray = demonized_geometry_ray.geometry_ray({
                 ray_range=4,
                 contact_range=ray_length,
-                flags=(1+2+4+8)})
+                flags=(1+2)})
             local ray_direction = vec_sub(self.world_vertices[ray_pair[1]], self.world_vertices[ray_pair[2]])
             ray_direction = ray_direction:normalize()
 
