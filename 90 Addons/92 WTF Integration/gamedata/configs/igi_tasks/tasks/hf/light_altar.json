@@ -1,23 +1,32 @@
 {
-	"preconditions": {
-	},
-	"disabled":false,
-	"setup": [
-
+	"preconditions": [
+		{
+			"type": "condlist",
+			"value": "{+yan_labx16_switcher_primary_off} true, false"
+	
+		}
+	],
+	"entities": [
 	{
-	"entity_type":"item",
-	"target":"fetch",
-	"section":"af_electra_moonlight",
-	"where":"anywhere"
+		"entity_type":"item",
+		"target":"fetch",
+		"section_name":"af_electra_moonlight",
+		"where":"anywhere"
 	}
 	],
-	"rewards_completed": {
-		"money": 0,
-		"goodwill": {
-			"value": 50
-		},
-		"items": {
-			"device_light_altar": 1
+	"quest_givers": [
+		{"Sakharov": true}
+	],
+	"rewards": {
+		"COMPLETED": {
+			"money": {
+				"value": 0,
+				"blocked": true
+			},
+			"item": {
+				"device_light_altar": 1
+			}
 		}
-	}
+	},
+	"icon": "ui_iconsTotal_artefact"
 }

@@ -1,310 +1,318 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <string_table>
-	<!-- Get Moonlight for Light Altar -->
-	<string id="igi_task_text_yan_stalker_sakharov_task_hf_light_altar_title">
+	<!-- MCM option text -->
+	<string id="igi_task_text_hf_workshop_title">
+		<text>Weapon Repair for Portable Workshop</text>
+	</string>
+	<string id="igi_task_text_hf_light_altar_title">
 		<text>Artefact Hunt for Strange Device</text>
 	</string>
-	<string id="igi_task_text_yan_stalker_sakharov_task_hf_light_altar_descr">
+	
+	<!-- Get Moonlight for Light Altar -->
+	<string id="igi_task_text_yan_stalker_sakharov_hf_light_altar_title">
+		<text>Artefact Hunt for Strange Device</text>
+	</string>
+	<string id="igi_task_text_yan_stalker_sakharov_hf_light_altar_descr">
 		<text>Professor Sakharov has asked me to find a Moonlight for research and development of a new device.</text>
 	</string>
-	<string id="igi_task_text_yan_stalker_sakharov_task_hf_light_altar_job_descr">
+	<string id="igi_task_text_yan_stalker_sakharov_hf_light_altar_job_descr">
 		<text>We have come into possession of a strange device that emits psi-waves. Fortunately, it is currently deactivated and our current research with it suggests a way to use this property for the better. If you obtain a Moonlight to counteract this, we can complete our research and give you the fruits of our labour in exchange. There is no pay, but a cutting-edge device should be more than enough, yes?</text>
 	</string>
-	<string id="igi_task_text_yan_stalker_sakharov_task_hf_light_altar_finish">
+	<string id="igi_task_text_yan_stalker_sakharov_hf_light_altar_finish">
 		<text>While you were gone, we were able to continue our research through simulations. With the Moonlight you have brought, we will be able to complete it. Here is your reward, as promised.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Peregrine, Yantar) -->
-	<string id="igi_task_text_mechanic_army_yan_mlr_task_hf_workshop_title">
+	<string id="igi_task_text_mechanic_army_yan_mlr_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_mechanic_army_yan_mlr_task_hf_workshop_descr">
+	<string id="igi_task_text_mechanic_army_yan_mlr_hf_workshop_descr">
 		<text>Peregrine has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_mechanic_army_yan_mlr_task_hf_workshop_job_descr">
+	<string id="igi_task_text_mechanic_army_yan_mlr_hf_workshop_job_descr">
 		<text>I was wondering if you wanted to prove your worth as a technician. I got a broken weapon back here - ordinarily, it would be scrapped for parts. Instead, how about you repair this for me and I can look into obtaining workshop tools for yourself?</text>
 	</string>
-	<string id="igi_task_text_mechanic_army_yan_mlr_task_hf_workshop_finish">
+	<string id="igi_task_text_mechanic_army_yan_mlr_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Kirilov, Agroprom) -->
-	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_title">
+	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_descr">
+	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_hf_workshop_descr">
 		<text>Lt. Kirilov has asked me to repair a broken weapon. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_job_descr">
+	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_hf_workshop_job_descr">
 		<text>I have a weapon in terrible shape that needs a full make-over. In exchange, how about a portable workshop? Normally, such equipment is restricted to trained specialists, but the Colonel has cleared me for this reward, on account of the tools you've brought. It will be useful if you're planning on extended excursions within the Zone.</text>
 	</string>
-	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_task_hf_workshop_finish">
+	<string id="igi_task_text_agr_smart_terrain_1_6_army_mechanic_stalker_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Mangun, Bar) -->
-	<string id="igi_task_text_bar_visitors_stalker_mechanic_task_hf_workshop_title">
+	<string id="igi_task_text_bar_visitors_stalker_mechanic_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_bar_visitors_stalker_mechanic_task_hf_workshop_descr">
+	<string id="igi_task_text_bar_visitors_stalker_mechanic_hf_workshop_descr">
 		<text>Mangun has asked me to repair a broken weapon from one of his customers. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_bar_visitors_stalker_mechanic_task_hf_workshop_job_descr">
+	<string id="igi_task_text_bar_visitors_stalker_mechanic_hf_workshop_job_descr">
 		<text>Thanks to those tools you brought me, everyone is coming to me for upgrades now! Speaking of, another stalker came by asking to repair this hunk of junk - it's a miracle they've survived for as long with this thing. If you repair this for me, I can get you a workshop of your own: this is my way to of repaying the favour.</text>
 	</string>
-	<string id="igi_task_text_bar_visitors_stalker_mechanic_task_hf_workshop_finish">
+	<string id="igi_task_text_bar_visitors_stalker_mechanic_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Loner, Darkscape) -->
-	<string id="igi_task_text_dasc_tech_mlr_task_hf_workshop_title">
+	<string id="igi_task_text_dasc_tech_mlr_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_dasc_tech_mlr_task_hf_workshop_descr">
+	<string id="igi_task_text_dasc_tech_mlr_hf_workshop_descr">
 		<text>The technician at the sawmill has asked me to repair a broken weapon. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_dasc_tech_mlr_task_hf_workshop_job_descr">
+	<string id="igi_task_text_dasc_tech_mlr_hf_workshop_job_descr">
 		<text>I have a weapon that needs repair, but there are hardly any materials around here to do the job. I've managed to scrounge up tools that could serve as a portable workshop, if you're interested in repairing in my stead?</text>
 	</string>
-	<string id="igi_task_text_dasc_tech_mlr_task_hf_workshop_finish">
+	<string id="igi_task_text_dasc_tech_mlr_hf_workshop_finish">
 		<text>Thank you for repairing this. As we agreed, here are the tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Limpid, Dark Valley) -->
-	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_title">
+	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_descr">
+	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_hf_workshop_descr">
 		<text>Limpid has asked me to repair a broken weapon. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_job_descr">
+	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_hf_workshop_job_descr">
 		<text>Hey, Sultan's got me on repairing this gun, but the thing's rusted back to hell. Repair this for me and how about I collect some tools back here for a workshop of your own?</text>
 	</string>
-	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_task_hf_workshop_finish">
+	<string id="igi_task_text_val_smart_terrain_7_3_bandit_mechanic_stalker_hf_workshop_finish">
 		<text>You followed through again! Good deal, man, here are the tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Hog, Dead City) -->
-	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_task_hf_workshop_title">
+	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_task_hf_workshop_descr">
+	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_hf_workshop_descr">
 		<text>Hog has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_task_hf_workshop_job_descr">
+	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_hf_workshop_job_descr">
 		<text>I was wondering if you wanted to prove your worth as a technician. I got a broken weapon back here - ordinarily, it would be scrapped for parts. Instead, how about you repair this for me and I can look into obtaining workshop tools for yourself?</text>
 	</string>
-	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_task_hf_workshop_finish">
+	<string id="igi_task_text_cit_killers_merc_mechanic_stalker_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Xenotech, Cordon) -->
-	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_title">
+	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_descr">
+	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_hf_workshop_descr">
 		<text>Xenotech has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_job_descr">
+	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_hf_workshop_job_descr">
 		<text>I was wondering if you wanted to prove your worth as a technician. I got a broken weapon back here - ordinarily, it would be scrapped for parts. Instead, how about you repair this for me and I can look into obtaining workshop tools for yourself?</text>
 	</string>
-	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_task_hf_workshop_finish">
+	<string id="igi_task_text_esc_smart_terrain_5_7_loner_mechanic_stalker_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Seryoga, Cordon) -->
-	<string id="igi_task_text_army_south_mechan_mlr_task_hf_workshop_title">
+	<string id="igi_task_text_army_south_mechan_mlr_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_army_south_mechan_mlr_task_hf_workshop_descr">
+	<string id="igi_task_text_army_south_mechan_mlr_hf_workshop_descr">
 		<text>Seryoga has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_army_south_mechan_mlr_task_hf_workshop_job_descr">
+	<string id="igi_task_text_army_south_mechan_mlr_hf_workshop_job_descr">
 		<text>You're heading deeper inside the Zone, right? I can get you tools for a portable workshop, but I need to see that you can use them properly. This particular gun should do the trick.</text>
 	</string>
-	<string id="igi_task_text_army_south_mechan_mlr_task_hf_workshop_finish">
+	<string id="igi_task_text_army_south_mechan_mlr_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Nitro, Jupiter) -->
-	<string id="igi_task_text_jup_b217_stalker_tech_task_hf_workshop_title">
+	<string id="igi_task_text_jup_b217_stalker_tech_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_jup_b217_stalker_tech_task_hf_workshop_descr">
+	<string id="igi_task_text_jup_b217_stalker_tech_hf_workshop_descr">
 		<text>Nitro has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_jup_b217_stalker_tech_task_hf_workshop_job_descr">
+	<string id="igi_task_text_jup_b217_stalker_tech_hf_workshop_job_descr">
 		<text>I was wondering if you wanted to prove your worth as a technician. I got a broken weapon back here - ordinarily, it would be scrapped for parts. Instead, how about you repair this for me and I can look into obtaining workshop tools for yourself?</text>
 	</string>
-	<string id="igi_task_text_jup_b217_stalker_tech_task_hf_workshop_finish">
+	<string id="igi_task_text_jup_b217_stalker_tech_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Bandit, Jupiter) -->
-	<string id="igi_task_text_jup_cont_mech_bandit_task_hf_workshop_title">
+	<string id="igi_task_text_jup_cont_mech_bandit_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_jup_cont_mech_bandit_task_hf_workshop_descr">
+	<string id="igi_task_text_jup_cont_mech_bandit_hf_workshop_descr">
 		<text>The tech gangster has asked me to repair a broken weapon. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_jup_cont_mech_bandit_task_hf_workshop_job_descr">
+	<string id="igi_task_text_jup_cont_mech_bandit_hf_workshop_job_descr">
 		<text>Mhmm.. This shit-bucket of a gun gotta get fixed and there ain't shit for parts my way. Hey, take this thing off my hands and I'll hook you up with some tools for a workshop - whaddaya say?</text>
 	</string>
-	<string id="igi_task_text_jup_cont_mech_bandit_task_hf_workshop_finish">
+	<string id="igi_task_text_jup_cont_mech_bandit_hf_workshop_finish">
 		<text>Hah! You come in clutch yet again! Thanks bro. Here's the workshop tools - don't mind the blood...</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Monolith, Jupiter) -->
-	<string id="igi_task_text_mechanic_monolith_jup_depo_task_hf_workshop_title">
+	<string id="igi_task_text_mechanic_monolith_jup_depo_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_mechanic_monolith_jup_depo_task_hf_workshop_descr">
+	<string id="igi_task_text_mechanic_monolith_jup_depo_hf_workshop_descr">
 		<text>The technician at the depot has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_mechanic_monolith_jup_depo_task_hf_workshop_job_descr">
+	<string id="igi_task_text_mechanic_monolith_jup_depo_hf_workshop_job_descr">
 		<text>Our brothers require your aid. To do so, I can give you tools for maintaining your own gear. But first, I must see you demonstrate your skill in repairing this weapon. It has seen many battles and must be restored to its former glory.</text>
 	</string>
-	<string id="igi_task_text_mechanic_monolith_jup_depo_task_hf_workshop_finish">
+	<string id="igi_task_text_mechanic_monolith_jup_depo_hf_workshop_finish">
 		<text>Thank you for restoring this weapon, brother. Here is your reward.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Novikov, Great Swamp) -->
-	<string id="igi_task_text_mar_base_stalker_tech_task_hf_workshop_title">
+	<string id="igi_task_text_mar_base_stalker_tech_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_mar_base_stalker_tech_task_hf_workshop_descr">
+	<string id="igi_task_text_mar_base_stalker_tech_hf_workshop_descr">
 		<text>Novikov has asked me to repair a broken weapon. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_mar_base_stalker_tech_task_hf_workshop_job_descr">
+	<string id="igi_task_text_mar_base_stalker_tech_hf_workshop_job_descr">
 		<text>Hey, some idiot came by and dropped this gun off. Say he's left this sitting in the water overnight, but it looks completely ruined to me. Think you can take a crack at it? I got some workshop tools with your name on it if you do. </text>
 	</string>
-	<string id="igi_task_text_mar_base_stalker_tech_task_hf_workshop_finish">
+	<string id="igi_task_text_mar_base_stalker_tech_hf_workshop_finish">
 		<text>Awesome, man! You came through for me once again! Here, let me throw some money at you.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (UNISG, LOSTZONE) -->
-	<string id="igi_task_text_jup_depo_isg_tech_task_hf_workshop_title">
+	<string id="igi_task_text_jup_depo_isg_tech_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_jup_depo_isg_tech_task_hf_workshop_descr">
+	<string id="igi_task_text_jup_depo_isg_tech_hf_workshop_descr">
 		<text>Maus has asked me to repair a broken weapon. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_jup_depo_isg_tech_task_hf_workshop_job_descr">
+	<string id="igi_task_text_jup_depo_isg_tech_hf_workshop_job_descr">
 		<text>An agent needs this particular weapon for a operation. Only problem is that it is ruined, and there is no time for a new replacement. Repair this for me, and I'll put in a good word about getting you a workshop for yourself.</text>
 	</string>
-	<string id="igi_task_text_jup_depo_isg_tech_task_hf_workshop_finish">
+	<string id="igi_task_text_jup_depo_isg_tech_hf_workshop_finish">
 		<text>Your work is well done. Thank you. Here is the workshop as I promised.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Screw, Army Warehouses) -->
-	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_title">
+	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_descr">
+	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_hf_workshop_descr">
 		<text>Screw has asked me to repair a broken weapon of his. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_job_descr">
+	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_hf_workshop_job_descr">
 		<text>Yo! Have you seen my latest prototype? It's pretty-- well it's a work in progress. So, I might have spent a little too much time working on this and one of my orders is due soon. Could you take care of this one for me? I can put together a portable workshop for you in exchange.</text>
 	</string>
-	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_task_hf_workshop_finish">
+	<string id="igi_task_text_mil_smart_terrain_7_7_freedom_mechanic_stalker_hf_workshop_finish">
 		<text>You madman! You're a lifesaver. As promised, one of Freedom's finest, top-of-the-line workshops -- deployable anytime, anywhere!</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Cleric, Pripyat) -->
-	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_task_hf_workshop_title">
+	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_task_hf_workshop_descr">
+	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_hf_workshop_descr">
 		<text>Cleric has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_task_hf_workshop_job_descr">
+	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_hf_workshop_job_descr">
 		<text>You look skilled in gunsmithing. Restore this weapon.</text>
 	</string>
-	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_task_hf_workshop_finish">
+	<string id="igi_task_text_pri_monolith_monolith_mechanic_stalker_hf_workshop_finish">
 		<text>Good. You've proven your worth.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (MERCENARY, Pripyat) -->
-	<string id="igi_task_text_merc_pri_a18_mech_mlr_task_hf_workshop_title">
+	<string id="igi_task_text_merc_pri_a18_mech_mlr_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_merc_pri_a18_mech_mlr_task_hf_workshop_descr">
+	<string id="igi_task_text_merc_pri_a18_mech_mlr_hf_workshop_descr">
 		<text>A mercenary technician in the Outskirts has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_merc_pri_a18_mech_mlr_task_hf_workshop_job_descr">
+	<string id="igi_task_text_merc_pri_a18_mech_mlr_hf_workshop_job_descr">
 		<text>I was wondering if you wanted to prove your worth as a technician. I got a broken weapon back here - ordinarily, it would be scrapped for parts. Instead, how about you repair this for me and I can look into obtaining workshop tools for yourself?</text>
 	</string>
-	<string id="igi_task_text_merc_pri_a18_mech_mlr_task_hf_workshop_finish">
+	<string id="igi_task_text_merc_pri_a18_mech_mlr_hf_workshop_finish">
 		<text>Congratulations - I didn't expect you to actually repair the thing, but here it is! Well as I said, you are certainly worthy of these tools.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Monolith2, Pripyat) -->
-	<string id="igi_task_text_mechanic_monolith_kbo_task_hf_workshop_title">
+	<string id="igi_task_text_mechanic_monolith_kbo_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_mechanic_monolith_kbo_task_hf_workshop_descr">
+	<string id="igi_task_text_mechanic_monolith_kbo_hf_workshop_descr">
 		<text>The technician in the Yubileiny service center has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_mechanic_monolith_kbo_task_hf_workshop_job_descr">
+	<string id="igi_task_text_mechanic_monolith_kbo_hf_workshop_job_descr">
 		<text>Do you wish for a workshop you can call your own? You can prove your worth to me by repairing this instrument of the Monolith.</text>
 	</string>
-	<string id="igi_task_text_mechanic_monolith_kbo_task_hf_workshop_finish">
+	<string id="igi_task_text_mechanic_monolith_kbo_hf_workshop_finish">
 		<text>Outstanding work, brother. Here is the workshop you desire...</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Dazhbog, Red Forest) -->
-	<string id="igi_task_text_red_greh_tech_task_hf_workshop_title">
+	<string id="igi_task_text_red_greh_tech_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_red_greh_tech_task_hf_workshop_descr">
+	<string id="igi_task_text_red_greh_tech_hf_workshop_descr">
 		<text>Dazhbog has asked me to repair a broken weapon of his. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_red_greh_tech_task_hf_workshop_job_descr">
+	<string id="igi_task_text_red_greh_tech_hf_workshop_job_descr">
 		<text>I need this weapon fixed. You want some workshop tools. Interested?</text>
 	</string>
-	<string id="igi_task_text_red_greh_tech_task_hf_workshop_finish">
+	<string id="igi_task_text_red_greh_tech_hf_workshop_finish">
 		<text>Good. You've fixed it for me.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (BANDIT, Truck Cemetary) -->
-	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_task_hf_workshop_title">
+	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_task_hf_workshop_descr">
+	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_hf_workshop_descr">
 		<text>The technician in the Truck Cemetery has asked me to repair a broken weapon of his. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_task_hf_workshop_job_descr">
+	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_hf_workshop_job_descr">
 		<text>Ay, some sucker got trashed mentally from a few too many swigs of vodka, and then got trashed physically by a chimera when he wandered over to those cars over there. Long story short, I got his gun but it's wrecked from hell and back. Think you can fix it up? I got some boys ambushing a Duty convoy and should bring back some sweet stuff, if you're in.</text>
 	</string>
-	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_task_hf_workshop_finish">
+	<string id="igi_task_text_trucks_cemetery_bandit_mechanic_hf_workshop_finish">
 		<text>You actually did it, my man! Thanks, bro, you're the best. Enjoy our latest spoils.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (Cardan, Zaton) -->
-	<string id="igi_task_text_zat_a2_stalker_mechanic_task_hf_workshop_title">
+	<string id="igi_task_text_zat_a2_stalker_mechanic_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_zat_a2_stalker_mechanic_task_hf_workshop_descr">
+	<string id="igi_task_text_zat_a2_stalker_mechanic_hf_workshop_descr">
 		<text>Cardan has asked me to repair a broken weapon of his. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_zat_a2_stalker_mechanic_task_hf_workshop_job_descr">
+	<string id="igi_task_text_zat_a2_stalker_mechanic_hf_workshop_job_descr">
 		<text>I'm here to fix guns and drink vodka, and I'm all out of vodka. While I secure the next shipment of the good stuff, could you fix up this one for me? I can get you some workshop tools if you want them.</text>
 	</string>
-	<string id="igi_task_text_zat_a2_stalker_mechanic_task_hf_workshop_finish">
+	<string id="igi_task_text_zat_a2_stalker_mechanic_hf_workshop_finish">
 		<text>Amazing! Here's your tools as promised, and feel free to stop by any time.</text>
 	</string>
 
 	<!-- Get Portable Workshop for Repaired Weapon (MERC, Zaton) -->
-	<string id="igi_task_text_zat_stancia_mech_merc_task_hf_workshop_title">
+	<string id="igi_task_text_zat_stancia_mech_merc_hf_workshop_title">
 		<text>Weapon Repair for Portable Workshop</text>
 	</string>
-	<string id="igi_task_text_zat_stancia_mech_merc_task_hf_workshop_descr">
+	<string id="igi_task_text_zat_stancia_mech_merc_hf_workshop_descr">
 		<text>A mercenary technician has asked me to repair a broken weapon of his as a sort of test. I should bring it back once it's in excellent condition. There appears to be some maker's mark etched onto the weapon, which makes it difficult to pass off an identical gun of the same make.</text>
 	</string>
-	<string id="igi_task_text_zat_stancia_mech_merc_task_hf_workshop_job_descr">
+	<string id="igi_task_text_zat_stancia_mech_merc_hf_workshop_job_descr">
 		<text>One of our guys is going on a covert job and needs this weapon fixed to blend in. Trouble is, I'm swamped suddenly with upgrade orders. If you help out, I can sort out some workshop tools for you.</text>
 	</string>
-	<string id="igi_task_text_zat_stancia_mech_merc_task_hf_workshop_finish">
+	<string id="igi_task_text_zat_stancia_mech_merc_hf_workshop_finish">
 		<text>Well damn, the thing's pristine! Good job, here's the workshop tools as we agreed.</text>
 	</string>
 </string_table>

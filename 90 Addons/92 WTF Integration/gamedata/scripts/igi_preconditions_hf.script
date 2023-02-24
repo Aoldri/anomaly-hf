@@ -1,0 +1,38 @@
+function is_condlist_true(condlist_str, npc)
+	if (condlist_str and condlist_str ~= "") then
+		local precond_list = xr_logic.parse_condlist(npc, nil, "precondition", condlist_str)
+		if (precond_list == "false") then
+			return false
+		end
+		if (db.actor and xr_logic.pick_section_from_condlist(db.actor, npc, precond_list) == "false") then
+			return false
+		end
+	end
+	return true
+end
+
+igi_precondition.conditions.condlist = function (cond)
+	printf("CONDLIST PRECONDITION")
+	---@type game_object
+    local npc = mob_trade.GetTalkingNpc()
+
+	---@type string
+    local precond_string = cond.value
+
+	-- Replace '[taskgiver.section]' with the task giver's section
+	precond_string = precond_string:gsub("%[taskgiver.section%]", npc:section())
+
+	printf("CONDLIST: %s returns %s", precond_string, (is_condlist_true(precond_string, npc) and "true" or "false"))
+
+	return is_condlist_true(precond_string, npc)
+end
+
+---@param cond {uid: string, maximum: number}
+igi_precondition.conditions.repeats = function (cond)
+	---@type game_object
+    local npc = mob_trade.GetTalkingNpc()
+
+	local precond_max_str = ("{%s_%s_complete_%s} true, false"):format(npc:section(), cond.uid, cond.maximum)
+
+	return is_condlist_true(precond_max_str, npc)
+end

@@ -1,27 +1,42 @@
 {
-	"preconditions": {
+	"preconditions": [
+	{
+		"type": "condlist",
+		"value": "{+[taskgiver.section]_upgrade_tier_3} true, false"
+
 	},
-	"disabled":false,
-	"setup": [
-		{
-			"entity_type":"item",
-			"target": "repair",
-			"section":"&TableValueRandom(f_hf_weapon_repair)&",
-			"online_activities":
-				{"obj_available":
-					{"break_item":true}
-				},
-			"where":0,
-			"to_create": true
-		}
-	],
-	"rewards_completed": {
-		"money": 0,
-		"goodwill": {
-			"value": 25
-		},
-		"items": {
-			"workshop_item": 1
-		}
+	{
+		"type": "repeats",
+		"uid": "hf_workshop",
+		"maximum": 1
 	}
+	],
+	"entities": [{
+		"entity_type":"item",
+		"target": "repair",
+		"section_name":"&TableValueRandom(hf_weapon_repair)&",
+		"where":0,
+		"to_create": true
+	}],
+	"actions":  [{
+		"conditions": [{
+			"type": "can_get_object",
+			"id": "[item_1_1.id]"
+			}],
+		"type" : "break_item",
+		"id": "[item_1_1.id]"
+	}],
+	"rewards": {
+		"COMPLETED": {
+			"money": {
+				"value": 0
+			},
+			"item": {
+				"workshop_item": 1
+			}
+		}
+	},
+	"quest_givers": [
+		{"Mechanic": true}
+	]
 }

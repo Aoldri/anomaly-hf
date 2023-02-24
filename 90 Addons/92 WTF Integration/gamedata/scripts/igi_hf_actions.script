@@ -4,30 +4,21 @@ local function parent_section(sec)
 	return SYS_GetParam(0, sec,"parent_section") or sec
 end
 
-local function break_item_func(item_data)
-	-- local item = igi_helper.level_object(item_data.id)
-	local item = get_object_by_id(item_data.id)
-	if item then
-		-- Set overall item condition to low
-		item:set_condition(igi_random.rand(10, 40)/100)
-
-		-- Set condition of individual weapon parts to low
-		if item and IsWeapon(item) and (not IsMelee(item)) then
-			local sec = parent_section(item:section())
-			local parts = ini_parts:r_string_ex("con_parts_list", sec)
-			local parts_data = {}
-			for i,part in pairs(str_explode(parts, ",")) do
-				parts_data[part] = igi_random.rand(10, 40)
-				
-			end
-			se_save_var( item:id(), item:name(), "parts", parts_data )
-		end
+igi_actions.actions.break_item = function (action)
+	local item = igi_helper.level_object(action.id)
+	if not item then return end
+	if not IsWeapon(item) then return end
+	if IsMelee(item) then return end
+	
+	-- Set overall item condition to low
+	item:set_condition(igi_random.rand(10, 40)/100)
+	
+	-- Set condition of individual weapon parts to low
+	local sec = parent_section(item:section())
+	local parts = ini_parts:r_string_ex("con_parts_list", sec)
+	local parts_data = {}
+	for i,part in pairs(str_explode(parts, ",")) do
+		parts_data[part] = igi_random.rand(10, 40)
 	end
-end
-
-local action_handlers = {
-	break_item = break_item_func
-}
-for k,v in pairs(action_handlers) do
-	igi_activities.action_handlers[k] = v
+	se_save_var( item:id(), item:name(), "parts", parts_data )
 end

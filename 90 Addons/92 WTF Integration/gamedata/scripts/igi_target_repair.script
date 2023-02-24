@@ -14,27 +14,34 @@ end
 -- Patch fetch task so that it takes condition of items into account (must be greater than threshold)
 -- TODO: Allow adjustment of threshold per task, rather than globally
 function ready_to_finish(se_obj)
-
     local item = igi_helper.level_object(se_obj.id)
-	if item then
-        local section = item:section()
-        local threshold = 90
-        local in_good_condition = true
-        -- Reject if overall weapon condition is less than threshold
-        if item.condition and item:condition() < (threshold/100) then
-            in_good_condition = false
-        end
-        -- Reject if one or more parts have a condition less than threshold
-        local parts = se_load_var(item:id(), item:name(), "parts")
-        for k,v in pairs(parts) do
-            if string.find(k, "prt_w_") and v < threshold then
-                in_good_condition = false
-            end
-        end
-        return in_good_condition
-    end
+
     -- Reject in case the game object cannot be found (server object is still intact)
-	return false
+	if not item then return false end
+
+    local threshold = 90
+    local in_good_condition = true
+
+    -- Reject if overall weapon condition is less than threshold
+    if item.condition and item:condition() < (threshold/100) then
+	
+        in_good_condition = false
+    end
+
+    -- Reject if one or more parts have a condition less than threshold
+    local parts = se_load_var(item:id(), item:name(), "parts")
+	if parts then
+		for k,v in pairs(parts) do
+			if string.find(k, "prt_w_") and v < threshold then
+			
+				in_good_condition = false
+			end
+		end
+	end
+
+	local is_with_actor = se_obj.parent_id == 0
+
+    return in_good_condition and is_with_actor
 end
 
 function get_status(entity)
@@ -42,3 +49,74 @@ function get_status(entity)
 	if is_failed(se_obj, entity.section_name) then return TASK_STATUSES.FAILED end
 	return ready_to_finish(se_obj) and TASK_STATUSES.READY_TO_FINISH or TASK_STATUSES.RUNNING
 end
+
+function test(entity)
+	local assert_test = igi_tests.assert_test
+	entity._test_stage = (entity._test_stage or 0) + 1
+
+	local function repair_item(item)
+		if not item then return end
+		
+		-- Set overall item condition to low
+		item:set_condition(100)
+	
+		-- Set condition of individual weapon parts to low
+		local sec = SYS_GetParam(0, item:section(),"parent_section") or item:section()
+		local parts = itms_manager.ini_parts:r_string_ex("con_parts_list", sec)
+		local parts_data = {}
+		for i,part in pairs(str_explode(parts, ",")) do
+			parts_data[part] = 100
+		end
+		se_save_var( item:id(), item:name(), "parts", parts_data )
+	end
+
+	-- Go to Item
+	if entity._test_stage == 1 then
+		local se_obj = igi_entities.get_binded_object(entity)
+		assert_test(se_obj, "Entity does not exist")
+		igi_tests.travel_to_se_obj(se_obj)
+	
+	-- Break Item
+	elseif entity._test_stage == 2 then
+		local se_obj = igi_entities.get_binded_object(entity)
+		local obj = igi_helper.level_object(se_obj.id)
+		assert_test(obj, "Entity is not online when player travels to it")
+		
+		igi_actions.actions.break_item(se_obj)
+		assert_test(entity.status == "RUNNING", "Task is still completeable after reducing item condition")
+
+	-- Get Item
+	elseif entity._test_stage == 3 then
+		local se_obj = igi_entities.get_binded_object(entity)
+		local obj = igi_helper.level_object(se_obj.id)
+		db.actor:transfer_item(obj, db.actor)
+		
+	-- Repair Item
+	elseif entity._test_stage == 4 then
+		local se_obj = igi_entities.get_binded_object(entity)
+		local obj = igi_helper.level_object(se_obj.id)
+		repair_item(obj)
+
+	elseif entity._test_stage == 5 then
+		assert_test(entity.status == "READY_TO_FINISH", "Quest did not complete")
+		
+		return true
+	end
+end
+igi_tests.register_subtask_test("test_target_repair", {
+	entities = {
+		{
+			entity_type = "item",
+			target = "repair",
+			section_name = "wpn_ak",
+			to_create =  true,
+			where =  "[location_1_1.id]",
+		},
+		{
+			entity_type = "location",
+			where = "0,0",
+			search_for =  "smart",
+		}
+
+	}
+})

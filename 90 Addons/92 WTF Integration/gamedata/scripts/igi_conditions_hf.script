@@ -1,18 +1,11 @@
-local trace_assert = igi_helper.trace_assert
-local WorldState = igi_world_state.WorldState
-
-local function can_get_object(obj_data)
-    -- print("can_get_object(obj_data)")
-	local item = igi_helper.level_object(obj_data.id)
+igi_actions.conditions.can_get_object = function (cond)
+    -- print("can_get_object(cond)")
+	local item = igi_helper.level_object(cond.id)
 	if item then
-        -- print("can_get_object(obj_data) - TRUE")
+        -- print("can_get_object(cond) - TRUE")
         return true
     else
-        -- print("can_get_object(obj_data) - FALSE")
+        -- print("can_get_object(cond) - FALSE")
         return false
     end
 end
-
-igi_activities.add_condition_handlers{
-	obj_available = can_get_object,
-}
