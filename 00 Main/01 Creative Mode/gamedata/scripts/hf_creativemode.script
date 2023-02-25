@@ -67,7 +67,7 @@ function UIHFSelectObj:Close()
 end
 
 -- GUI
----@type UIHFSelectObj
+---@type hf_creativemode.UIHFSelectObj
 GUISelect = nil
 function open_select_menu()
     if not DEV_DEBUG then return end

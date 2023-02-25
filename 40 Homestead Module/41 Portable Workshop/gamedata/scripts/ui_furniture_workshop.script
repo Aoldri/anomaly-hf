@@ -142,7 +142,7 @@ end
 
 function UIFurnitureWorkshop:Pickup()
 	local obj = get_object_by_id(self.obj_id)
-	---@type hf_binder_wrapper
+	---@type bind_hf_base.hf_binder_wrapper
 	local wrapper = obj:binded_object().wrapper
 	wrapper:pickup()
 	self:Close()

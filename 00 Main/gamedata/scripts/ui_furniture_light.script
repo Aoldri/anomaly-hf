@@ -2,6 +2,7 @@ local gc = game.translate_string
 local ratio = utils_xml.screen_ratio()
 
 local use_ingame_time = true
+---@type ui_furniture_light.UIFurnitureLight
 GUI = nil -- instance, don't touch
 
 class "UIFurnitureLight" (CUIScriptWnd)
@@ -53,10 +54,10 @@ end
 
 function UIFurnitureLight:Pickup()
 	local obj = get_object_by_id(self.light_id)
-	---@type hf_binder_wrapper
+	---@type bind_hf_base.hf_binder_wrapper
 	local wrapper = obj:binded_object().wrapper
 
-	wrapper:Pickup()
+	wrapper:pickup()
 	self:Close()
 end
 

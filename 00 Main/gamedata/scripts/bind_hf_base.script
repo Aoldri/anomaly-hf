@@ -1,7 +1,7 @@
 gc = game.translate_string
 
 ---@param id number
----@return hf_binder_wrapper|nil
+---@return bind_hf_base.hf_binder_wrapper|nil
 function get_wrapper(id)
     local obj = get_object_by_id(id)
     if not obj then return end
@@ -129,7 +129,7 @@ class "base_binder" (object_binder)
 -- Class constructor
 function base_binder:__init(obj) super(obj)
     self.object:set_tip_text(gc("st_interact"))
-    ---@type hf_binder_wrapper
+    ---@type bind_hf_base.hf_binder_wrapper
     self.wrapper = nil
 end
 -- Class update

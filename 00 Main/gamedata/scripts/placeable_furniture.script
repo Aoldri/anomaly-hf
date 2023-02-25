@@ -118,7 +118,7 @@ end
 ---Also initialises additional data depending on their placeable_type as defined in their section
 ---@param placeable_section string
 ---@param location vector
----@param rotation Quaternion|vector
+---@param rotation aol_rotation.Quaternion|vector
 ---@param lvid integer? Level Vertex ID
 ---@param gvid integer? Game Vertex ID
 ---@return integer|nil obj.id
@@ -281,7 +281,7 @@ function get_obj_at_crosshair()
     return obj
 end
 
----@return hf_binder_wrapper|nil
+---@return bind_hf_base.hf_binder_wrapper|nil
 function get_wrapper_at_crosshair()
     local obj = get_obj_at_crosshair()
     if not obj then return end
@@ -419,7 +419,6 @@ function start_placing_item(section)
     base_rot = ini_sys:r_float_ex(section, "base_rotation", 0) or 0
     base_loc = vector():set(tonumber(bbox_origin[1]), tonumber(bbox_origin[2]), tonumber(bbox_origin[3]))
 
-    ---@type bbox_collider
     bbox = hf_bbox.bbox_collider(tonumber(bbox_size[1]), tonumber(bbox_size[2]), tonumber(bbox_size[3]))
 
     bbox:OffsetVertices(base_loc)
@@ -484,7 +483,7 @@ end
 -- UI
 -------
 -- Advanced Controls
----@class UIAdvancedControls
+---@class placeable_furniture.UIAdvancedControls
 GUI = nil -- instance, don't touch
 function open_gui()
 	if not DEV_DEBUG then
@@ -721,15 +720,13 @@ function UIAdvancedControls:Close()
 end
 
 -- Advanced Interaction Menu
----@class UIRadialMenu
+---@class arm.UIRadialMenu
 RadialGUI = nil
 
 function create_interact_gui()
-    ---@class UIRadialMenu
     local RadialGUI = arm.UIRadialMenu()
 
     -- Pickup
-    ---@class OptionData
     local opt_pickup = arm.OptionData("opt_pickup", function (state) 
         return arm.get_stateful_texture("ui_hf_radial_icon_pickup", state)
     end)
@@ -741,7 +738,6 @@ function create_interact_gui()
     opt_pickup:SetText({title = gc("st_pickup")})
     
     -- Open UI
-    ---@class OptionData
     local opt_ui = arm.OptionData("opt_use", function (state) 
         return arm.get_stateful_texture("ui_hf_radial_icon_use", state)
     end)
@@ -753,7 +749,6 @@ function create_interact_gui()
     opt_ui:SetText({title = gc("st_open_adv_ui")})
     
     -- Freeze/Unfreeze
-    ---@class OptionData
     local opt_freeze = arm.OptionData("opt_freeze", function(state)
         if state == arm.States.HIGHLIGHTED then
             return "ui_hf_radial_icon_frozen"
@@ -769,7 +764,6 @@ function create_interact_gui()
     opt_freeze:SetText({title = gc("st_freeze")})
     
     -- Upgrade
-    ---@class OptionData
     local opt_upgrade = arm.OptionData("opt_upgrade", "ui_hf_radial_icon_upgrade")
     opt_upgrade:SetColour(function (state)
         return arm.get_stateful_colour(state) -- stateful colour
@@ -781,7 +775,6 @@ function create_interact_gui()
     opt_upgrade:SetState(arm.States.DISABLED)
     
     -- Wire Connections
-    ---@class OptionData
     local opt_connections = arm.OptionData("opt_connections", "ui_hf_radial_icon_connections")
     opt_connections:SetColour(function (state)
         return arm.get_stateful_colour(state) -- stateful colour
@@ -826,7 +819,7 @@ function create_interact_gui()
     return RadialGUI
 end
 
----@param wrapper hf_binder_wrapper
+---@param wrapper bind_hf_base.hf_binder_wrapper
 function update_radial_gui(wrapper)
     local is_pickupable = wrapper:is_pickupable()
     if is_pickupable then
@@ -851,7 +844,7 @@ function update_radial_gui(wrapper)
     end
 end
 
----@param wrapper hf_binder_wrapper
+---@param wrapper bind_hf_base.hf_binder_wrapper
 function open_interact_gui(wrapper)
 	hide_hud_inventory()
 
@@ -905,7 +898,6 @@ end
 
 ---@param obj game_object
 function pickup_obj(obj)
-    ---@type hf_binder_wrapper
 	local wrapper = bind_hf_base.get_wrapper(obj:id())
     if wrapper:is_pickupable() then
         wrapper:pickup()
