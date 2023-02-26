@@ -31,6 +31,8 @@ function stop_all_sound_object()
 	sound_object_by_path = {}
 end
 
+local playing_piano_id = nil
+
 local notes = {
 	"C1",
 	"C#1",
@@ -565,8 +567,9 @@ function PlaySound(note)
 
 	-- Play note
 	local snd = get_safe_sound_object(note2snd[new_note])
+	local obj = playing_piano_id and level.object_by_id(playing_piano_id) or db.actor
 	if snd then
-		snd:play(db.actor, 0, sound_object.s2d)
+		snd:play_at_pos(obj, obj:position(), sound_object.s3d)
 		snd.volume = volume
 	else
 		-- printf("could not play sound")
@@ -581,7 +584,6 @@ local prev_part = nil
 function UpdateChartMetadata()
 	bpm = sheets[sheets_index].bpm
 	transpose = sheets[sheets_index].transpose
-	music_index = 1
 	-- printf("BPM: " .. bpm)
 	-- printf("Score: " .. sheets[sheets_index].score)
 
@@ -910,6 +912,7 @@ function UIFurniturePiano:OnSheetSelect()
 	sheets_index = self.filtered_sheets[channel_id]
 	UpdateChartMetadata()
 	RemoveTimeEvent("PlayablePiano","IterateChart")
+	music_index = 1
 	self.autoplay_btn:SetCheck(false)
 
 	self.title:SetText(sheets[sheets_index].title)
@@ -992,6 +995,7 @@ end
 
 function UIFurniturePiano:TestAndShow(obj_id)
 	-- printf("awf")
+	playing_piano_id = obj_id
     self.obj_id = obj_id
 	self:Initialize()
 	self:ShowDialog(true)
@@ -1132,12 +1136,6 @@ function UIFurniturePiano:Close()
 	if (self:IsShown()) then
 		self:HideDialog()
 	end
-	RemoveTimeEvent("PlayablePiano","IterateChart")
-	music_index = 1
-	-- CreateTimeEvent("PlayablePiano","ClearSound", 5, stop_all_sound_object)
-	--db.actor:give_info_portion("tutorial_sleep")
-	disable_info("actor_is_sleeping")
-	disable_info("sleep_active")
 	
 	Unregister_UI("UIFurniturePiano")
 end

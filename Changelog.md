@@ -12,6 +12,7 @@
   - Objects cannot be picked up
   - See guide for how to add world objects
 - Added 'Creative Mode': Ability to select and place objects without needing to use their item variant
+- Enabled Autoplay on the piano to continue outside of the UI
 
 ## New Objects
 - Weapon Displays, by Utjan
