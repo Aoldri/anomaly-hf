@@ -899,6 +899,7 @@ end
 ---@param obj game_object
 function pickup_obj(obj)
 	local wrapper = bind_hf_base.get_wrapper(obj:id())
+    if not wrapper then return end
     if wrapper:is_pickupable() then
         wrapper:pickup()
         print_msg("Picked up object")
