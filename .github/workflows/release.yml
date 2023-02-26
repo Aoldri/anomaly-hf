@@ -19,12 +19,26 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@master
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      id: deps
+      run: |
+        mkdir -p "001 Dependencies/ahuyn/"
+        mkdir -p "001 Dependencies/arm/"
+
+        cp -r anomaly-dependencies/trader_autoinject/gamedata "001 Dependencies/ahuyn/"
+        cp -r anomaly-dependencies/workshop_autoinject/gamedata "001 Dependencies/ahuyn/"
+        cp -r anomaly-addon-deps/AnomalyRadialMenu/gamedata "001 Dependencies/arm/"
+    
     - name: Archive Release
       uses: thedoctor0/zip-release@0.7.1
       with:
         type: 'zip'
         filename: 'HideoutFurniture-${{ github.ref_name }}.zip'
-        exclusions: '*.git* /*node_modules/* .editorconfig'
+        exclusions: '*.git* /*node_modules/* .editorconfig /*anomaly-dependencies/* /*anomaly-addon-deps/*'
+    
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
       with:

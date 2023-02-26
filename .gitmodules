@@ -1,0 +1,6 @@
+[submodule "anomaly-addon-deps"]
+	path = anomaly-addon-deps
+	url = https://github.com/Aoldri/anomaly-addon-deps.git
+[submodule "anomaly-dependencies"]
+	path = anomaly-dependencies
+	url = https://github.com/ahuyn/anomaly-dependencies.git
