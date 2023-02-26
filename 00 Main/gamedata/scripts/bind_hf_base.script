@@ -5,7 +5,11 @@ gc = game.translate_string
 function get_wrapper(id)
     local obj = get_object_by_id(id)
     if not obj then return end
-    return obj:binded_object().wrapper
+
+    local binder = obj:binded_object()
+    if not binder then return end
+    
+    return binder.wrapper
 end
 
 function freeze_obj(id)
