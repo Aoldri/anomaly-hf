@@ -1,63 +1,57 @@
-local hf_data = {}
+local varname = "hf_data"
 
 -- Soft update
 function update_data(id, data)
-    hf_data[id] = hf_data[id] or {}
+    local hf_data = se_load_var(id, nil, varname) or {}
     for index, datum in pairs(data) do
-        hf_data[id][index] = datum
+        hf_data[index] = datum
     end
+    se_save_var(id, nil, varname, hf_data)
 end
 
 -- Override
 function set_data(id, data)
-    hf_data[id] = data
+    se_save_var(id, nil, varname, data)
 end
 
 -- Getter
 function get_data(id) -- need to add code to binders to update data before access
-    return hf_data[id]
+    return se_load_var(id, nil, varname)
 end
 
 -- Destroy
 function delete_data(id)
-    hf_data[id] = nil
+    se_save_var(id, nil, varname, nil)
 end
 
 -- Debugging print
 function print_data(id)
     printf("print_data(id):"..id)
-    if not hf_data[id] then
+    local hf_data = se_load_var(id, nil, varname)
+    if not hf_data then
         printf("no data")
         return
     end
-    for index, datum in pairs(hf_data[id]) do
+    for index, datum in pairs(hf_data) do
         printf("index:"..index..", datum:"..datum)
     end
 end
 
 function save_state(mdata)
-    for id, data in pairs(hf_data) do
-        -- Attempt to call binder:save_data() if se is online
-        local game_obj = level.object_by_id(id)
+    -- Try to save data from online objects
+    local function save_data(obj)
+        local wrapper = bind_hf_base.get_wrapper(obj:id())
+        if not wrapper then return end
 
-        if game_obj then -- I fucking love not having continue, wowwiee
-            local binder = game_obj:binded_object()
-            if binder then -- this reads so nice like wowww
-                if binder.save_data then
-                    binder:save_data()
-                end
-            end
-        end
+        if not wrapper.save_data then return end
+        wrapper:save_data()
     end
 
-    mdata.hf_data = hf_data
-end
-
-function load_state(mdata)
-	hf_data = mdata.hf_data or {}
+    for obj in game_objects_iter() do
+        save_data(obj)
+    end
 end
 
 function on_game_start()
 	RegisterScriptCallback("save_state",save_state)
-	RegisterScriptCallback("load_state",load_state)
 end
