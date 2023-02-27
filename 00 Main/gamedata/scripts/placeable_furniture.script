@@ -300,6 +300,7 @@ local function on_key_hold(dik)
         if ui_mcm.key_hold("hf_interact_adv", dik) then
             local wrapper = get_wrapper_at_crosshair()
             if not wrapper then return end
+            if Check_UI() then return end
             open_interact_gui(wrapper)
         end
     end
