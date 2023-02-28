@@ -230,13 +230,24 @@ local function actor_on_update()
         
         -- rotate from upwards vector to normal vector on surface
         local q0 = aol_rotation.get_rotation_between(u, v)
+        
         -- rotate to point downwards + offset
-        local q1 = aol_rotation.get_rotation_around(v, v:getH() + rot_z + math.pi)
+        local angle_to_downwards = 0
+        local similarity_to_upwards_axis = v:dotproduct(vector():set(0,1,0))
+        if similarity_to_upwards_axis > 0.9999 then -- pointing upwards
+            angle_to_downwards = cam_dir:getH()
+        elseif similarity_to_upwards_axis < -0.9999 then -- pointing downwards
+            angle_to_downwards = math.pi - cam_dir:getH()
+        else
+            angle_to_downwards = angle_to_downwards + v:getH() + math.pi
+        end
+        local q1 = aol_rotation.get_rotation_around(v, angle_to_downwards + rot_z)
+        
         -- perform each rotation in succession
         local q = aol_rotation.Quaternion():multiply(q0):multiply(q1)
         
         -- Location
-        local q1_2 = aol_rotation.get_rotation_around(v, v:getH() + math.pi)
+        local q1_2 = aol_rotation.get_rotation_around(v, angle_to_downwards)
         local q_loc = aol_rotation.Quaternion():multiply(q0):multiply(q1_2)
         local rotated_loc_offset = q_loc:rotate_vector(location_offset)
         
