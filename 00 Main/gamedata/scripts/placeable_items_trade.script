@@ -1,42 +1,52 @@
-local trade_table = {}
-local valid_items = {}
-local ini_trade = ini_file("items\\settings\\hideout_furniture\\trade\\factions.ltx")
-ini_trade:section_for_each(function(faction)
-    trade_table[faction] = {}
+---@param npc game_object
+local function generate_trade_table(npc)
+    local ini_trades = ini_file("items\\settings\\hideout_furniture\\trade\\trades.ltx")
+    local trade_table = {}
 
-    local supply_levels = {1, 2, 3}
+    local npc_faction = npc:character_community() or "stalker"
+    local npc_supply_level = trader_autoinject.supply_level(npc, true) or 1
+    
+    local ignore_faction_restrictions = ui_mcm.get("aol_hf/gameplay/uniform_trade_profiles") or false
 
-    for _, supply_level in ipairs(supply_levels) do
-        local trade_items = {}
-        
-        local items_str = ini_trade:r_string_ex(faction, tostring(supply_level))
-        local items = parse_key_value(items_str)
-        if items then
-            for item, amount in pairs(items) do                
-                local is_valid_item = valid_items[item] or ini_sys:section_exist(item)
-                valid_items[item] = is_valid_item
-                
-                if is_valid_item then
-                    trade_items[item] = amount
+    ini_trades:section_for_each(function(section)
+        -- Check if NPC meets required supply level
+        local min_supply_level = ini_trades:r_float_ex(section, "min_supply_level", 1)
+        if min_supply_level > npc_supply_level then return end
+
+        -- Check if NPC is in a valid faction
+        local factions = ini_trades:r_list(section, "factions", "all")
+        local is_faction_valid = false
+        if ignore_faction_restrictions then
+            is_faction_valid = true
+        else
+            for _, faction in pairs(factions) do
+                if faction == npc_faction or faction == "all" then
+                    is_faction_valid = true
+                    break
                 end
             end
         end
-        trade_table[faction][supply_level] = trade_items
-    end
-end)
-valid_items = nil
+        if not is_faction_valid then return end
+
+        -- Add items to trade table
+        local items = ini_trades:r_list(section, "items")
+        for _, item in pairs(items) do
+            local amount = ini_trades:r_float(section, "amount") or 1
+            trade_table[item] = amount
+        end
+    end)
+
+    return trade_table
+end
 
 function spawn_items(npc)
     local is_supplier = trader_autoinject.get_trader_type(npc) == trader_autoinject.SUPPLIER
-    if is_supplier then
-        local community = npc:character_community() or "stalker"
-        local trader_table = trade_table[community] or trade_table["stalker"]
-        local supply_level = clamp(trader_autoinject.supply_level(npc, true) or 1, 1, 3)
-
-        if trader_table[supply_level] then
-            trader_autoinject.spawn_items(npc, trader_table[supply_level], true)
-        end
-    end
+    if not is_supplier then return end
+    
+    local trade_table = generate_trade_table(npc)
+    if not trade_table then return end
+    
+    trader_autoinject.spawn_items(npc, trade_table, true)
 end
 
 TraderAuto = trader_autoinject.update

@@ -26,6 +26,10 @@
 		<text>Gameplay</text>
 	</string>
 
+	<string id="ui_mcm_aol_hf_gameplay_uniform_trade_profiles">
+		<text>Use Uniform Trade Profiles</text>
+	</string>
+
 	<string id="ui_mcm_aol_hf_gameplay_use_ingame_time">
 		<text>Lights Show In-game Time</text>
 	</string>
