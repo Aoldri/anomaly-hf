@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <string_table>
 	<string id="st_placeable_radio">
-		<text>Радио</text>
+		<text>Radio</text>
 	</string>
 	<string id="st_placeable_radio_descr">
-		<text>Рация в рабочем состоянии. Оно способно принимать те же сигналы, которые слышны на многих базах по всей Зоне.\n \n
-		%c[ui_gray_3]СВОЙСТВА:\n
-		%c[d_blue] • %c[ui_gray_2] технологическая деталь\n
-		%c[d_blue] • %c[ui_gray_2] размещаемый предмет\n
+		<text>A radio in working condition. It is able to receive the same signals as those heard in many bases throughout the Zone.\n \n
+		%c[ui_gray_3]PROPERTIES:\n
+		%c[d_blue] • %c[ui_gray_2] technological item\n
+		%c[d_blue] • %c[ui_gray_2] placeable item\n
 		</text>
 	</string>
 </string_table>
