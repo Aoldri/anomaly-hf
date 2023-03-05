@@ -12,7 +12,6 @@ function is_condlist_true(condlist_str, npc)
 end
 
 igi_precondition.conditions.condlist = function (cond)
-	printf("CONDLIST PRECONDITION")
 	---@type game_object
     local npc = mob_trade.GetTalkingNpc()
 
@@ -21,8 +20,6 @@ igi_precondition.conditions.condlist = function (cond)
 
 	-- Replace '[taskgiver.section]' with the task giver's section
 	precond_string = precond_string:gsub("%[taskgiver.section%]", npc:section())
-
-	printf("CONDLIST: %s returns %s", precond_string, (is_condlist_true(precond_string, npc) and "true" or "false"))
 
 	return is_condlist_true(precond_string, npc)
 end
