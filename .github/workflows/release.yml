@@ -29,7 +29,6 @@ jobs:
         mkdir -p "001 Dependencies/arm/"
 
         cp -r anomaly-dependencies/trader_autoinject/gamedata "001 Dependencies/ahuyn/"
-        cp -r anomaly-dependencies/workshop_autoinject/gamedata "001 Dependencies/ahuyn/"
         cp -r anomaly-addon-deps/AnomalyRadialMenu/gamedata "001 Dependencies/arm/"
     
     - name: Archive Release
