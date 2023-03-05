@@ -13,6 +13,7 @@
   - See guide for how to add world objects
 - Added 'Creative Mode': Ability to select and place objects without needing to use their item variant
 - Enabled Autoplay on the piano to continue outside of the UI
+- Added Quick Use on single tap and a generic Radial Menu on hold when using the interact key on furniture
 
 ## New Objects
 - Weapon Displays, by Utjan
