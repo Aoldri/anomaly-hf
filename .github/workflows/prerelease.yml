@@ -49,3 +49,4 @@ jobs:
         title: "pre-release"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: true
+        id: "automatic_releases"

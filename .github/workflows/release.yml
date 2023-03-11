@@ -44,3 +44,4 @@ jobs:
         files: "HideoutFurniture-${{ github.ref_name }}.zip"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
+        id: "automatic_releases"
