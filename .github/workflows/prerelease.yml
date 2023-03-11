@@ -38,14 +38,14 @@ jobs:
       uses: thedoctor0/zip-release@0.7.1
       with:
         type: 'zip'
-        filename: 'HideoutFurniture-$DATE.zip'
+        filename: 'HideoutFurniture-${{ env.DATE }}.zip'
         exclusions: '*.git* /*node_modules/* .editorconfig /*anomaly-dependencies/* /*anomaly-addon-deps/*'
 
     - name: Upload Release
-    - uses: "marvinpinto/action-automatic-releases@latest"
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        files: "HideoutFurniture-$DATE.zip"
-        automatic_release_tag: "pre-release"
+        files: "HideoutFurniture-${{ env.DATE }}.zip"
+        automatic_release_tag: "latest"
         title: "pre-release"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: true
