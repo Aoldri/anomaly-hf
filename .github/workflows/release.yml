@@ -4,7 +4,7 @@ name: CI
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers the workflow on push events but only for the "main" branch and tagged commits
   push:
     tags:
       - "v*"
@@ -39,8 +39,8 @@ jobs:
         exclusions: '*.git* /*node_modules/* .editorconfig /*anomaly-dependencies/* /*anomaly-addon-deps/*'
     
     - name: Upload Release
-      uses: ncipollo/release-action@v1.12.0
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        artifacts: "HideoutFurniture-${{ github.ref_name }}.zip"
-        token: ${{ secrets.GITHUB_TOKEN }}
-        generateReleaseNotes: true
+        files: "HideoutFurniture-${{ github.ref_name }}.zip"
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
