@@ -5,7 +5,7 @@ function on_game_start()
     RegisterScriptCallback("ActorMenu_on_item_after_move", ActorMenu_on_item_after_move)
     RegisterScriptCallback("ActorMenu_on_item_before_move", ActorMenu_on_item_before_move)
     RegisterScriptCallback("actor_on_item_before_pickup", actor_on_item_before_pickup)
-    RegisterScriptCallback("game_object_on_net_spawn", server_entity_on_switch_online)
+    RegisterScriptCallback("game_object_on_net_spawn", game_object_on_net_spawn)
     RegisterScriptCallback("save_state", save_state)
     RegisterScriptCallback("load_state", load_state)
 
@@ -48,7 +48,7 @@ ini_displays:section_for_each(function(section)
 end)
 
 ---@param se_obj game_object
-function server_entity_on_switch_online(se_obj)
+function game_object_on_net_spawn(se_obj)
     for case_id, case_guns in pairs(weapon_displays) do
         for item_id, world_id in pairs(case_guns) do
             if se_obj:id() == world_id then
