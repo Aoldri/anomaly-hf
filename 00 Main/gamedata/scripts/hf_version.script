@@ -1,4 +1,4 @@
-VERSION = "2.0.1"
+VERSION = "2.1.0"
 
 ---- `0` = The value 0 if `version1` is the same as `version2`
 ---- `-1` = The value less than 0 if `version1` is older than `version2`
@@ -56,7 +56,7 @@ end
 -- Assumed to be sorted already
 local migration_functions = {
     {
-        version = "2.0.1",
+        version = "2.1.0",
         functor = reinit_obj_data,
     }
 }
