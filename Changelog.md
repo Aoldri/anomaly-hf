@@ -1,3 +1,17 @@
+# 2.1.0
+Features
+- Create save game migration system
+  - Old saves using 1.1.4 should now just work™
+
+Bug Fixes
+- Remove debug prints in WTF module
+
+Code Refactoring
+- Remove deprecated callbacks
+
+Builds
+- Tick default options in fomod
+
 # 2.0.0
 ## Breaking Changes
 - This update requires 1.5.2 modded exes
