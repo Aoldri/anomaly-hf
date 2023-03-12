@@ -1,0 +1,103 @@
+VERSION = "2.0.1"
+
+---- `0` = The value 0 if `version1` is the same as `version2`
+---- `-1` = The value less than 0 if `version1` is older than `version2`
+---- `1` = The value greater than 0 if `version1` newer than `version2  `
+---@param version1 string
+---@param version2 string
+---@return -1|0|1
+local function compare_version_to(version1, version2)
+    local major1, minor1, patch1 = version1:match("(%d+)%.(%d+)%.(%d+)")
+    local major2, minor2, patch2 = version2:match("(%d+)%.(%d+)%.(%d+)")
+
+    -- There's probably a better way, but I'm lazy atm :P
+    if major1 > major2 then return 1 end
+    if major1 < major2 then return -1 end
+
+    if minor1 > minor2 then return 1 end
+    if minor1 < minor2 then return -1 end
+
+    if patch1 > patch2 then return 1 end
+    if patch1 < patch2 then return -1 end
+
+    return 0
+end
+
+------------------------
+-- Migration Functions
+------------------------
+
+-- pre-2.0.0
+-- Initialise metadata
+local function reinit_obj_data()
+    local sim = alife()
+    for i=1,65534 do
+        local se_obj = sim:object(i)
+        if se_obj then
+            local placeable_type = hf_furniture_types.get_type(se_obj)
+            if placeable_type then
+                -- Initialise data store
+                hf_obj_manager.set_data(se_obj.id, {})
+
+                if placeable_type == "light" then
+                    -- Switch off light when it is online
+                    hf_obj_manager.update_data(obj_id, {is_on=false})
+                end
+            end
+        end
+    end
+end
+
+----------------------------------------------------------------
+-- Generic functions to migrate save based on semver versioning
+----------------------------------------------------------------
+
+-- Array of functions for migrating from old versions
+-- Assumed to be sorted already
+local migration_functions = {
+    {
+        version = "2.0.1",
+        functor = reinit_obj_data,
+    }
+}
+
+---@return number|nil
+local function get_starting_migration_i(version)
+    for i, migration_function_data in ipairs(migration_functions) do
+        -- Exit if current version is older than a version with migrate function
+        if compare_version_to(version, migration_function_data.version) == -1 then
+            return i
+        end
+    end
+end
+
+---@param version string
+local function migrate_save(version)
+    local start_i = get_starting_migration_i(version)
+    if not start_i then return end
+
+    for i=start_i, #migration_functions do
+        migration_functions[i].functor()
+    end
+end
+
+-------------
+-- Callbacks
+-------------
+
+function save_state(mdata)
+    mdata.hf_version = VERSION
+end
+
+function actor_on_init()
+    local save_hf_version = alife_storage_manager.get_state().hf_version
+    if not save_hf_version or save_hf_version ~= VERSION then
+        -- Save has a different version from that which is loaded
+        migrate_save(save_hf_version or "0.0.0")
+    end
+end
+
+function on_game_start()
+    RegisterScriptCallback("save_state", save_state)
+    RegisterScriptCallback("actor_on_init", actor_on_init)
+end
