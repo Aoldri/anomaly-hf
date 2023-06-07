@@ -3,7 +3,7 @@ local function generate_trade_table(npc)
     local ini_trades = ini_file("items\\settings\\hideout_furniture\\trade\\trades.ltx")
     local trade_table = {}
 
-    local npc_faction = npc:character_community() or "stalker"
+    local npc_faction = trader_autoinject.get_real_community(npc, "stalker")
     local npc_supply_level = trader_autoinject.supply_level(npc, true) or 1
     
     local ignore_faction_restrictions = ui_mcm.get("aol_hf/gameplay/uniform_trade_profiles") or false
