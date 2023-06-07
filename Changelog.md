@@ -1,3 +1,8 @@
+# 2.1.1
+## Bug Fixes
+- Fix loner traders not having loner-specific items
+- Fix crashing on 4:3 resolutions when opening radial menu
+
 # 2.1.0
 ## Features
 - Create save game migration system
