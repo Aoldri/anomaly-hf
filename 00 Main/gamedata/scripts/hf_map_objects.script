@@ -143,7 +143,6 @@ function generate_spawn_list()
 	local j = 1
 	for _, section in pairs(ini_map_objects:get_sections()) do
 		local n = ini_map_objects.ini:line_count(section)
-		spawned_objects = {}
 		for i=0,n-1 do
 			local result, id, value	= ini_map_objects.ini:r_line_ex(section,i)
 			local p = str_explode(value,",")
