@@ -126,8 +126,8 @@ end
 -- Spawning objects on new game
 ----------------------------------
 
----@type table<string, true|nil>
-local spawned_objects = {}
+---@type table<string, number>
+spawned_objects = {}
 local hf_obj_spawned = false
 
 ---@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, map: string}[]
@@ -187,7 +187,7 @@ function actor_on_first_update()
 		local obj_id = placeable_furniture.create_object(section, location, rotation, lvid, gvid)
 		if not obj_id then return end
 		hf_obj_manager.update_data(obj_id, {is_world_obj=true})
-		spawned_objects[v.spawn_id] = true
+		spawned_objects[v.spawn_id] = obj_id
 
 		::continue::
 	end
