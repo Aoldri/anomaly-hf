@@ -80,7 +80,15 @@ end
 function UIRecordObj:OnAccept()
     local spawn_name = self.input:GetText()
 
-    add_obj_to_ltx(level.name(), spawn_name, self.section, self.position, self.level_vertex_id, self.game_vertex_id, self.rotation)
+	local data = {
+		["object"] = self.section,
+		["position"] = self.position,
+		["lvid"] = self.level_vertex_id,
+		["gvid"] = self.game_vertex_id,
+		["rotation"] = self.rotation,
+	}
+
+    add_obj_to_ltx(spawn_name, data)
 	self:Close()
 end
 
@@ -105,20 +113,21 @@ end
 ----------------------------------
 -- Storing object data to LTX
 ----------------------------------
-function placement_data_to_string(section, position, level_vertex_id, game_vertex_id, rotation)
-    return section .. "," ..
-           position.x .. "," .. position.y .. "," .. position.z .. "," ..
-           level_vertex_id .. "," ..
-           game_vertex_id .. "," ..
-           rotation.x .. "," .. rotation.y .. "," .. rotation.z
+local function is_vector(var)
+	if type(var) ~= "userdata" then return false end
+	if var.x and var.y and var.z then return true end
+	return false
 end
 
-function add_obj_to_ltx(level_name, spawn_name, section, position, level_vertex_id, game_vertex_id, rotation)
+function add_obj_to_ltx(spawn_name, data)
+	---@type ini_file_ex
     local ini_cc = ui_debug_launcher.ini_cc
 	if spawn_name == nil or spawn_name == "" then
 		spawn_name = os.date("%Y/%m/%d-%H:%M:%S")
 	end
-    ini_cc:w_value(level_name, spawn_name, placement_data_to_string(section, position, level_vertex_id, game_vertex_id, rotation))
+	for key, value in pairs(data) do
+		ini_cc:w_value(spawn_name, key, is_vector(value) and utils_data.vector_to_string(value) or value)
+	end
     ini_cc:save()
 end
 
