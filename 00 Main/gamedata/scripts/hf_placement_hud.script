@@ -1,42 +1,29 @@
 -- Display onscreen text for placement controls
 
-local function generate_holding_msg()
-    local holding_msg = [[
-    F - Place Object\n
-    TAB - Toggle Collision Detection\n
-    CAPS - Toggle Surface Alignment\n
-    HOME - Switch to Advanced Mode
-    ]]
+local function get_placement_binds()
+    return {
+        ["key_interact"] = ui_mcm.dispaly_key(bind_to_dik(key_bindings.kUSE)),
+        ["key_collision"] = ui_mcm.dispaly_key(ui_mcm.get("aol_hf/controls/bind_collision")),
+        ["key_align"] = ui_mcm.dispaly_key(ui_mcm.get("aol_hf/controls/bind_alignment")),
+        ["key_mode"] = ui_mcm.dispaly_key(ui_mcm.get("aol_hf/controls/bind_place_mode")),
+    }
+end
 
-    return holding_msg
+local function generate_msg(string_id)
+    local msg = game.translate_string(string_id)
+    return utils_data.parse_string_keys(msg, get_placement_binds())
+end
+
+local function generate_holding_msg()
+    return generate_msg("st_hf_holding_msg")
 end
 
 local function generate_advanced_msg()
-    local advanced_msg = [[
-    F - Place Object\n
-    \n
-    Transforms:\n
-    LMB - Move on Horizontal Plane\n
-    RMB - Rotate about Vertical Axis\n
-    Shift + LMB - Move along Vertical Axis\n
-    \n
-    Modifiers:\n
-    ALT - Snap to Axis\n
-    LCTRL - Finetune Control\n
-    \n
-    HOME - Switch to Preview Mode
-    ]]
-
-    return advanced_msg
+    return generate_msg("st_hf_advanced_msg")
 end
 
 local function generate_preview_msg()
-    local preview_msg = [[
-    F - Place Object\n
-    ESC - Cancel Placement\n
-    HOME - Switch to Advanced Mode
-    ]]
-    return preview_msg
+    return generate_msg("st_hf_preview_msg")
 end
 
 local state_to_msg_func = {
