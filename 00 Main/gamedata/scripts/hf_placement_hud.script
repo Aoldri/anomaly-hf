@@ -1,0 +1,116 @@
+-- Display onscreen text for placement controls
+
+local function generate_holding_msg()
+    local holding_msg = [[
+    F - Place Object\n
+    TAB - Toggle Collision Detection\n
+    CAPS - Toggle Surface Alignment\n
+    HOME - Switch to Advanced Mode
+    ]]
+
+    return holding_msg
+end
+
+local function generate_advanced_msg()
+    local advanced_msg = [[
+    F - Place Object\n
+    \n
+    Transforms:\n
+    LMB - Move on Horizontal Plane\n
+    RMB - Rotate about Vertical Axis\n
+    Shift + LMB - Move along Vertical Axis\n
+    \n
+    Modifiers:\n
+    ALT - Snap to Axis\n
+    LCTRL - Finetune Control\n
+    \n
+    HOME - Switch to Preview Mode
+    ]]
+
+    return advanced_msg
+end
+
+local function generate_preview_msg()
+    local preview_msg = [[
+    F - Place Object\n
+    ESC - Cancel Placement\n
+    HOME - Switch to Advanced Mode
+    ]]
+    return preview_msg
+end
+
+local state_to_msg_func = {
+    [placeable_furniture.states.HOLDING] = generate_holding_msg,
+    [placeable_furniture.states.ADV_CTRL] = generate_advanced_msg,
+    [placeable_furniture.states.PREVIEW] = generate_preview_msg
+}
+
+---@type hf_placement_hud.UIHFPlacementHUD|nil
+HUD = nil
+
+class "UIHFPlacementHUD" (CUIScriptWnd)
+
+function UIHFPlacementHUD:__init() super()
+    self:Initialise()
+end
+
+function UIHFPlacementHUD:__finalize()
+end
+
+function UIHFPlacementHUD:Initialise()
+    self:SetWndRect(Frect():set(0,0,1024,768))
+    self:SetAutoDelete(true)
+
+    local xml = CScriptXmlInit()
+    xml:ParseFile("ui_hf_placement_hud.xml")
+
+    self.bg = xml:InitFrame("background", self)
+    self.text = xml:InitTextWnd("background:text", self.bg)
+end
+
+function UIHFPlacementHUD:Refresh(state)
+    local msg_func = state_to_msg_func[state]
+    if not msg_func then self:Clear() end
+
+    self.text:SetText(msg_func())
+    self.text:AdjustHeightToText()
+
+    self.bg:SetHeight(self.text:GetHeight() + 24)
+end
+
+function UIHFPlacementHUD:Update()
+    CUIScriptWnd.Update(self)
+end
+
+function UIHFPlacementHUD:Clear()
+    self.text:SetText("")
+end
+
+-------------
+
+function update_hud(state)
+    if HUD == nil then
+        HUD = UIHFPlacementHUD()
+        get_hud():AddDialogToRender(HUD)
+    end
+
+    HUD:Refresh(state)
+end
+
+function remove_hud()
+    if HUD ~= nil then
+        get_hud():RemoveDialogToRender(HUD)
+        HUD = nil
+    end
+end
+
+local hf_set_state = placeable_furniture.set_state
+function placeable_furniture.set_state(new_state)
+    hf_set_state(new_state)
+    if placeable_furniture.in_placing_state() then
+        update_hud(new_state)
+    else
+        remove_hud()
+    end
+end
+

@@ -1,0 +1,8 @@
+<w>
+    <background x="0" y="0" width="148" height="200" stretch="1">
+        <texture>ui_icons_PDA_dialog</texture>
+        <text x="8" y="8" width="132" height="184" stretch="1" complex_desc="0">
+            <text font="medium" complex_mode="1" align="l" vert_align="t"/>
+        </text>
+    </background>
+</w>
