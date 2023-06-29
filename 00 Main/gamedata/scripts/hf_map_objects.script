@@ -130,7 +130,7 @@ end
 spawned_objects = {}
 local hf_obj_spawned = false
 
----@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, map: string}[]
+---@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, story_id: string}[]
 function generate_spawn_list()
 	local ini_map_objects = ini_file_ex("plugins\\world_objects\\objects.ltx")
 	local obj_tbl = {}
@@ -164,6 +164,7 @@ function generate_spawn_list()
 			lvid = ini_spawns:r_float_ex(section, "lvid"),
 			gvid = ini_spawns:r_float_ex(section, "gvid"),
 			spawn_id = section,
+			story_id = ini_spawns:r_string_ex(section, "story_id"),
 		}
 		table.insert(obj_tbl, entry)
 	end
@@ -188,6 +189,10 @@ function actor_on_first_update()
 		if not obj_id then return end
 		hf_obj_manager.update_data(obj_id, {is_world_obj=true})
 		spawned_objects[v.spawn_id] = obj_id
+
+		if v.story_id then
+			story_objects.register(obj_id, v.story_id)
+		end
 
 		::continue::
 	end
