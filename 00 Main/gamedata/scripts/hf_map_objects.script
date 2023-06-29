@@ -135,9 +135,12 @@ end
 -- Spawning objects on new game
 ----------------------------------
 
----A map of spawned objects, pointing to their object id
----@type table<string, number>
+---A map of spawned objects, pointing to their object id if object still exists, true if released, nil otherwise
+---@type table<string, number|true>
 spawned_objects = {}
+
+-- Map of object ids to spawn id (used for cleanup)
+id_to_spawn_id = {}
 
 ---Generates a list of objects to be spawned, reading from objects.ltx (old format) and spawns.ltx (new format)
 ---@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, story_id: string|nil}[]
@@ -197,6 +200,7 @@ function actor_on_first_update()
 		
 		-- Track spawned objects
 		spawned_objects[v.spawn_id] = obj_id
+		id_to_spawn_id[obj_id] = v.spawn_id
 
 		-- Register story_id if it exists
 		if v.story_id then
@@ -248,6 +252,14 @@ function hf_on_furniture_place(id)
 	add_obj_prompt(obj:section_name(), obj.position, obj.m_level_vertex_id, obj.m_game_vertex_id, obj.angle)
 end
 
+function server_entity_on_unregister(se_obj,type_name)
+	local spawn_id = id_to_spawn_id[se_obj.id]
+	if not spawn_id then return end
+
+	spawned_objects[spawn_id] = true
+	id_to_spawn_id[se_obj.id] = nil
+end
+
 function on_game_start()
 	RegisterScriptCallback("on_option_change",on_option_change)
     on_option_change(mcm_keybinds)
@@ -257,4 +269,5 @@ function on_game_start()
 	RegisterScriptCallback("save_state",save_state)
 	RegisterScriptCallback("load_state",load_state)
 	RegisterScriptCallback("hf_on_furniture_place", hf_on_furniture_place)
+	RegisterScriptCallback("server_entity_on_unregister", server_entity_on_unregister)
 end
