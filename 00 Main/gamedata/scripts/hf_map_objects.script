@@ -126,38 +126,56 @@ end
 -- Spawning objects on new game
 ----------------------------------
 
-local ini_map_objects = ini_file_ex("plugins\\world_objects\\objects.ltx")
+---@type table<string, true|nil>
 local spawned_objects = {}
 local hf_obj_spawned = false
 
----@type {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, map: string}[]
-local obj_tbl = {}
-local j = 1
-for _, section in pairs(ini_map_objects:get_sections()) do
-	local n = ini_map_objects.ini:line_count(section)
-	spawned_objects = {}
-    for i=0,n-1 do
-        local result, id, value	= ini_map_objects.ini:r_line_ex(section,i)
-        local p = str_explode(value,",")
-        if (p) then
-			obj_tbl[j] = {
-				section = p[1],
-				location = vector():set(tonumber(p[2]), tonumber(p[3]), tonumber(p[4])),
-				lvid = tonumber(p[5]),
-				gvid = tonumber(p[6]),
-				rotation = vector():set(tonumber(p[7]), tonumber(p[8]), tonumber(p[9])),
-				spawn_id = id,
-			}
-			j = j + 1
-        end
-    end
+---@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, map: string}[]
+function generate_spawn_list()
+	local ini_map_objects = ini_file_ex("plugins\\world_objects\\objects.ltx")
+	local obj_tbl = {}
+	local j = 1
+	for _, section in pairs(ini_map_objects:get_sections()) do
+		local n = ini_map_objects.ini:line_count(section)
+		spawned_objects = {}
+		for i=0,n-1 do
+			local result, id, value	= ini_map_objects.ini:r_line_ex(section,i)
+			local p = str_explode(value,",")
+			if (p) then
+				obj_tbl[j] = {
+					section = p[1],
+					location = vector():set(tonumber(p[2]), tonumber(p[3]), tonumber(p[4])),
+					lvid = tonumber(p[5]),
+					gvid = tonumber(p[6]),
+					rotation = vector():set(tonumber(p[7]), tonumber(p[8]), tonumber(p[9])),
+					spawn_id = id,
+				}
+				j = j + 1
+			end
+		end
+	end
+
+	local ini_spawns = ini_file_ex("plugins\\world_objects\\spawns.ltx")
+	for _, section in pairs(ini_spawns:get_sections()) do
+		local entry = {
+			section = ini_spawns:r_string_ex(section, "object"),
+			location = utils_data.string_to_vector(ini_spawns:r_string_ex(section, "position")),
+			rotation = utils_data.string_to_vector(ini_spawns:r_string_ex(section, "rotation")),
+			lvid = ini_spawns:r_float_ex(section, "lvid"),
+			gvid = ini_spawns:r_float_ex(section, "gvid"),
+			spawn_id = section,
+		}
+		table.insert(obj_tbl, entry)
+	end
+
+	return obj_tbl
 end
 
 function actor_on_first_update()
 	if hf_obj_spawned then return end
 
 	-- Spawn world objects
-	for k, v in pairs(obj_tbl) do
+	for k, v in pairs(generate_spawn_list()) do
 		if spawned_objects[v.spawn_id] then goto continue end
 
 		local section = v.section
