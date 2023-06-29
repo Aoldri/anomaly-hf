@@ -186,7 +186,8 @@ function actor_on_first_update()
 		local rotation = v.rotation
 
 		local obj_id = placeable_furniture.create_object(section, location, rotation, lvid, gvid)
-		if not obj_id then return end
+		if not obj_id then goto continue end
+
 		hf_obj_manager.update_data(obj_id, {is_world_obj=true})
 		spawned_objects[v.spawn_id] = obj_id
 
