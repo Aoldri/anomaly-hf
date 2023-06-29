@@ -1,3 +1,15 @@
+# 2.2.0
+## Features
+- Spawn world objects per-entry, instead of once per save
+- Add human-readable ltx files for spawning objects (see `configs/world_objects/spawns.ltx`)
+- Register world objects' story id
+- Add popup to show available controls during placement
+
+## Bug Fixes
+- Continue spawning world objects even if one fails
+- Disabled movement during advanced placement
+- Fixed crash when dropping weapon displays (Thanks Rage4556!)
+
 # 2.1.1
 ## Bug Fixes
 - Fix loner traders not having loner-specific items
