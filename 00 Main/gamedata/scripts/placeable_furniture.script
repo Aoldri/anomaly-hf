@@ -517,7 +517,6 @@ end
 class "UIAdvancedControls" (CUIScriptWnd)
 
 function UIAdvancedControls:__init() super()
-    self:AllowMovement(true)
 	self:InitControls()
 	self:InitCallBacks()
 
