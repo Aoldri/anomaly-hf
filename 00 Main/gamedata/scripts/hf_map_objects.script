@@ -126,14 +126,20 @@ end
 -- Spawning objects on new game
 ----------------------------------
 
+---A map of spawned objects, pointing to their object id
 ---@type table<string, number>
 spawned_objects = {}
+
+-- Deprecated: Used to prevent spawning world objects on saves made before v2.2.0
 local hf_obj_spawned = false
 
----@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, story_id: string}[]
+---Generates a list of objects to be spawned, reading from objects.ltx (old format) and spawns.ltx (new format)
+---@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, story_id: string|nil}[]
 function generate_spawn_list()
-	local ini_map_objects = ini_file_ex("plugins\\world_objects\\objects.ltx")
 	local obj_tbl = {}
+
+	-- Iterate over objects.ltx, reading every entry for every map (section)
+	local ini_map_objects = ini_file_ex("plugins\\world_objects\\objects.ltx")
 	local j = 1
 	for _, section in pairs(ini_map_objects:get_sections()) do
 		local n = ini_map_objects.ini:line_count(section)
@@ -155,6 +161,7 @@ function generate_spawn_list()
 		end
 	end
 
+	-- Iterate over spawns.ltx, reading every entry (section)
 	local ini_spawns = ini_file_ex("plugins\\world_objects\\spawns.ltx")
 	for _, section in pairs(ini_spawns:get_sections()) do
 		local entry = {
@@ -179,18 +186,16 @@ function actor_on_first_update()
 	for k, v in pairs(generate_spawn_list()) do
 		if spawned_objects[v.spawn_id] then goto continue end
 
-		local section = v.section
-		local location = v.location
-		local lvid = v.lvid
-		local gvid = v.gvid
-		local rotation = v.rotation
-
-		local obj_id = placeable_furniture.create_object(section, location, rotation, lvid, gvid)
+		local obj_id = placeable_furniture.create_object(v.section, v.location, v.rotation, v.lvid, v.gvid)
 		if not obj_id then goto continue end
 
+		-- Set world_obj flag: Disable pickup
 		hf_obj_manager.update_data(obj_id, {is_world_obj=true})
+		
+		-- Track spawned objects
 		spawned_objects[v.spawn_id] = obj_id
 
+		-- Register story_id if it exists
 		if v.story_id then
 			story_objects.register(obj_id, v.story_id)
 		end
@@ -232,12 +237,13 @@ function on_option_change(mcm) --new in mcm 1.6.0 mcm passes true to the on_opti
 	end
 end
 
+-- Open record prompt if MCM option is on
 function hf_on_furniture_place(id)
 	if not record_on_place then return end
-	
+
 	local obj = alife_object(id)
 	if not obj then return end
-	
+
 	add_obj_prompt(obj:section_name(), obj.position, obj.m_level_vertex_id, obj.m_game_vertex_id, obj.angle)
 end
 
