@@ -34,7 +34,7 @@ local function migrate_world_objects()
     local hf_obj_spawned = alife_storage_manager.get_state().hf_obj_spawned
     if not hf_obj_spawned then return end
 
-    alife():iterate_object(function(se_obj)
+    alife():iterate_objects(function(se_obj)
         local data = hf_obj_manager.get_data(se_obj.id)
 
         if data and data.is_world_obj then
