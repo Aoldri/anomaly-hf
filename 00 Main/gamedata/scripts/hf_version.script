@@ -1,4 +1,4 @@
-VERSION = "2.2.0"
+VERSION = "2.3.0"
 
 ---- `0` = The value 0 if `version1` is the same as `version2`
 ---- `-1` = The value less than 0 if `version1` is older than `version2`
