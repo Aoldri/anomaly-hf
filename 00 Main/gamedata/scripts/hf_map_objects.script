@@ -143,7 +143,7 @@ spawned_objects = {}
 id_to_spawn_id = {}
 
 ---Generates a list of objects to be spawned, reading from objects.ltx (old format) and spawns.ltx (new format)
----@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, story_id: string|nil}[]
+---@return {section: string, location: vector, lvid: number, gvid: number, rotation: vector, spawn_id: number, story_id: string|nil, data: table}[]
 function generate_spawn_list()
 	local obj_tbl = {}
 
@@ -180,6 +180,7 @@ function generate_spawn_list()
 			gvid = ini_spawns:r_float_ex(section, "gvid"),
 			spawn_id = section,
 			story_id = ini_spawns:r_string_ex(section, "story_id"),
+			data = parse_key_value(ini_spawns:r_string_ex(section, "data"))
 		}
 		table.insert(obj_tbl, entry)
 	end
@@ -205,6 +206,14 @@ function actor_on_first_update()
 		-- Register story_id if it exists
 		if v.story_id then
 			story_objects.register(obj_id, v.story_id)
+		end
+
+		-- Set custom data
+		if v.data then
+			for i,val in pairs(v.data) do
+				v.data[i] = tonumber(val) or val
+			end
+			hf_obj_manager.update_data(obj_id, v.data)
 		end
 
 		::continue::
