@@ -160,7 +160,7 @@ function ActorMenu_on_item_after_move(case_id, item, mode, bag_from)
                 
                 -- Set invisible to AI (prevent pickup)
                 local data = utils_stpk.get_weapon_data(world_se_obj)
-                local remove_flags = 128
+                local remove_flags = 16 + 128
                 local flag_mask = bit_not(remove_flags)
                 data.object_flags = bit_and(data.object_flags, flag_mask)
 
