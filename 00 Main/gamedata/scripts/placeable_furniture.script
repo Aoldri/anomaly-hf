@@ -160,6 +160,8 @@ function create_object(placeable_section, location, rotation, lvid, gvid)
 
     utils_stpk.set_physic_data(data, obj)
 
+    SendScriptCallback("hf_on_furniture_spawn", obj.id)
+
     return obj.id
 end
 

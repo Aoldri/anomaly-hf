@@ -1,4 +1,9 @@
 function on_game_start()
 	-- Custom Callbacks
+    -- Called when furniture is manually placed by the player
     AddScriptCallback("hf_on_furniture_place") -- Params: (number: id of object)
+
+    -- Called when furniture is spawned
+    -- Occurs before `hf_on_furniture_place`
+    AddScriptCallback("hf_on_furniture_spawn") -- Params: (number: id of object)
 end
